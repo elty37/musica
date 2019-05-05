@@ -55,7 +55,7 @@ class PerformedScoresController extends AppController {
 				$this->Flash->error(__('The performed score could not be saved. Please, try again.'));
 			}
 		}
-		$performedScores = $this->PerformedScore->PerformedScore->find('list');
+		$performedScores = $this->PerformedScore->find('list');
 		$concerts = $this->PerformedScore->Concert->find('list');
 		$scores = $this->PerformedScore->Score->find('list');
 		$this->set(compact('performedScores', 'concerts', 'scores'));
@@ -83,7 +83,7 @@ class PerformedScoresController extends AppController {
 			$options = array('conditions' => array('PerformedScore.' . $this->PerformedScore->primaryKey => $id));
 			$this->request->data = $this->PerformedScore->find('first', $options);
 		}
-		$performedScores = $this->PerformedScore->PerformedScore->find('list');
+		$performedScores = $this->PerformedScore->find('list');
 		$concerts = $this->PerformedScore->Concert->find('list');
 		$scores = $this->PerformedScore->Score->find('list');
 		$this->set(compact('performedScores', 'concerts', 'scores'));

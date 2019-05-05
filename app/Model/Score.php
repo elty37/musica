@@ -5,11 +5,12 @@ App::uses('AppModel', 'Model');
  *
  * @property Score $Score
  * @property Replay $Replay
- * @property Score $Score
  */
 class Score extends AppModel {
 
-/**
+	public $primaryKey = 'score_id';
+
+	/**
  * Validation rules
  *
  * @var array
@@ -29,20 +30,6 @@ class Score extends AppModel {
 
 	// The Associations below have been created with all possible keys, those that are not needed can be removed
 
-/**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'Score' => array(
-			'className' => 'Score',
-			'foreignKey' => 'score_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
 
 /**
  * hasMany associations
@@ -63,19 +50,6 @@ class Score extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Score' => array(
-			'className' => 'Score',
-			'foreignKey' => 'score_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
 	);
 
 }

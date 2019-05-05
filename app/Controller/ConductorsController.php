@@ -55,7 +55,7 @@ class ConductorsController extends AppController {
 				$this->Flash->error(__('The conductor could not be saved. Please, try again.'));
 			}
 		}
-		$conductors = $this->Conductor->Conductor->find('list');
+		$conductors = $this->Conductor->find('list');
 		$users = $this->Conductor->User->find('list');
 		$concerts = $this->Conductor->Concert->find('list');
 		$this->set(compact('conductors', 'users', 'concerts'));
@@ -83,7 +83,7 @@ class ConductorsController extends AppController {
 			$options = array('conditions' => array('Conductor.' . $this->Conductor->primaryKey => $id));
 			$this->request->data = $this->Conductor->find('first', $options);
 		}
-		$conductors = $this->Conductor->Conductor->find('list');
+		$conductors = $this->Conductor->find('list');
 		$users = $this->Conductor->User->find('list');
 		$concerts = $this->Conductor->Concert->find('list');
 		$this->set(compact('conductors', 'users', 'concerts'));

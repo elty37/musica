@@ -6,9 +6,13 @@ App::uses('AppModel', 'Model');
  * @property User $User
  * @property Conductor $Conductor
  * @property PlayLog $PlayLog
- * @property User $User
  */
 class User extends AppModel {
+
+	/**
+	 * @var string primaryKey
+	 */
+	public $primaryKey = 'user_id';
 
 /**
  * Validation rules
@@ -60,20 +64,6 @@ class User extends AppModel {
 
 	// The Associations below have been created with all possible keys, those that are not needed can be removed
 
-/**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'User' => array(
-			'className' => 'User',
-			'foreignKey' => 'user_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
 
 /**
  * hasMany associations
@@ -107,19 +97,6 @@ class User extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'User' => array(
-			'className' => 'User',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
 	);
 
 }

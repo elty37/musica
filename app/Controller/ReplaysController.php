@@ -55,7 +55,7 @@ class ReplaysController extends AppController {
 				$this->Flash->error(__('The replay could not be saved. Please, try again.'));
 			}
 		}
-		$replays = $this->Replay->Replay->find('list');
+		$replays = $this->Replay->find('list');
 		$scores = $this->Replay->Score->find('list');
 		$this->set(compact('replays', 'scores'));
 	}
@@ -82,7 +82,7 @@ class ReplaysController extends AppController {
 			$options = array('conditions' => array('Replay.' . $this->Replay->primaryKey => $id));
 			$this->request->data = $this->Replay->find('first', $options);
 		}
-		$replays = $this->Replay->Replay->find('list');
+		$replays = $this->Replay->find('list');
 		$scores = $this->Replay->Score->find('list');
 		$this->set(compact('replays', 'scores'));
 	}

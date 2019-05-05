@@ -6,11 +6,16 @@ App::uses('AppModel', 'Model');
  * @property Conductor $Conductor
  * @property User $User
  * @property Concert $Concert
- * @property Conductor $Conductor
  */
 class Conductor extends AppModel {
 
-/**
+
+	/**
+	 * @var string $primaryKey
+	 */
+	public $primaryKey = 'user_id';
+
+	/**
  * Validation rules
  *
  * @var array
@@ -46,13 +51,6 @@ class Conductor extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Conductor' => array(
-			'className' => 'Conductor',
-			'foreignKey' => 'conductor_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id',
@@ -69,25 +67,5 @@ class Conductor extends AppModel {
 		)
 	);
 
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'Conductor' => array(
-			'className' => 'Conductor',
-			'foreignKey' => 'conductor_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
 
 }

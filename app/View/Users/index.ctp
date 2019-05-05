@@ -15,9 +15,7 @@
 	<tbody>
 	<?php foreach ($users as $user): ?>
 	<tr>
-		<td>
-			<?php echo $this->Html->link($user['User'][''], array('controller' => 'users', 'action' => 'view', $user['User']['id'])); ?>
-		</td>
+		<td><?php echo h($user['User']['user_id']); ?>&nbsp;</td>
 		<td><?php echo h($user['User']['user_name']); ?>&nbsp;</td>
 		<td><?php echo h($user['User']['role']); ?>&nbsp;</td>
 		<td><?php echo h($user['User']['password']); ?>&nbsp;</td>
@@ -50,8 +48,6 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Conductors'), array('controller' => 'conductors', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Conductor'), array('controller' => 'conductors', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Play Logs'), array('controller' => 'play_logs', 'action' => 'index')); ?> </li>

@@ -55,7 +55,7 @@ class PlayLogsController extends AppController {
 				$this->Flash->error(__('The play log could not be saved. Please, try again.'));
 			}
 		}
-		$playLogs = $this->PlayLog->PlayLog->find('list');
+		$playLogs = $this->PlayLog->find('list');
 		$users = $this->PlayLog->User->find('list');
 		$replays = $this->PlayLog->Replay->find('list');
 		$this->set(compact('playLogs', 'users', 'replays'));
@@ -83,7 +83,7 @@ class PlayLogsController extends AppController {
 			$options = array('conditions' => array('PlayLog.' . $this->PlayLog->primaryKey => $id));
 			$this->request->data = $this->PlayLog->find('first', $options);
 		}
-		$playLogs = $this->PlayLog->PlayLog->find('list');
+		$playLogs = $this->PlayLog->find('list');
 		$users = $this->PlayLog->User->find('list');
 		$replays = $this->PlayLog->Replay->find('list');
 		$this->set(compact('playLogs', 'users', 'replays'));

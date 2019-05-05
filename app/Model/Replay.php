@@ -6,11 +6,15 @@ App::uses('AppModel', 'Model');
  * @property Replay $Replay
  * @property Score $Score
  * @property PlayLog $PlayLog
- * @property Replay $Replay
  */
 class Replay extends AppModel {
 
-/**
+	/**
+	 * @var string $primaryKey
+	 */
+	public $primaryKey = 'replay_id';
+
+	/**
  * Validation rules
  *
  * @var array
@@ -36,13 +40,6 @@ class Replay extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Replay' => array(
-			'className' => 'Replay',
-			'foreignKey' => 'replay_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'Score' => array(
 			'className' => 'Score',
 			'foreignKey' => 'score_id',
@@ -58,19 +55,6 @@ class Replay extends AppModel {
  * @var array
  */
 	public $hasMany = array(
-		'PlayLog' => array(
-			'className' => 'PlayLog',
-			'foreignKey' => 'replay_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
 		'Replay' => array(
 			'className' => 'Replay',
 			'foreignKey' => 'replay_id',

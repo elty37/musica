@@ -6,11 +6,15 @@ App::uses('AppModel', 'Model');
  * @property PlayLog $PlayLog
  * @property User $User
  * @property Replay $Replay
- * @property PlayLog $PlayLog
  */
 class PlayLog extends AppModel {
 
-/**
+	/**
+	 * @var string $primaryKey
+	 */
+	public $primaryKey = 'play_log_id';
+
+	/**
  * Validation rules
  *
  * @var array
@@ -46,13 +50,6 @@ class PlayLog extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'PlayLog' => array(
-			'className' => 'PlayLog',
-			'foreignKey' => 'play_log_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id',
@@ -69,25 +66,5 @@ class PlayLog extends AppModel {
 		)
 	);
 
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'PlayLog' => array(
-			'className' => 'PlayLog',
-			'foreignKey' => 'play_log_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
 
 }

@@ -6,9 +6,12 @@ App::uses('AppModel', 'Model');
  * @property PerformedScore $PerformedScore
  * @property Concert $Concert
  * @property Score $Score
- * @property PerformedScore $PerformedScore
  */
 class PerformedScore extends AppModel {
+	/**
+	 * @var string $primaryKey
+	 */
+	public $primaryKey = 'performed_score_id';
 
 /**
  * Validation rules
@@ -56,13 +59,6 @@ class PerformedScore extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'PerformedScore' => array(
-			'className' => 'PerformedScore',
-			'foreignKey' => 'performed_score_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'Concert' => array(
 			'className' => 'Concert',
 			'foreignKey' => 'concert_id',
@@ -76,27 +72,6 @@ class PerformedScore extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
-	);
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'PerformedScore' => array(
-			'className' => 'PerformedScore',
-			'foreignKey' => 'performed_score_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
 		)
 	);
 

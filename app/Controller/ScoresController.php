@@ -55,7 +55,7 @@ class ScoresController extends AppController {
 				$this->Flash->error(__('The score could not be saved. Please, try again.'));
 			}
 		}
-		$scores = $this->Score->Score->find('list');
+		$scores = $this->Score->find('list');
 		$this->set(compact('scores'));
 	}
 
@@ -81,7 +81,7 @@ class ScoresController extends AppController {
 			$options = array('conditions' => array('Score.' . $this->Score->primaryKey => $id));
 			$this->request->data = $this->Score->find('first', $options);
 		}
-		$scores = $this->Score->Score->find('list');
+		$scores = $this->Score->find('list');
 		$this->set(compact('scores'));
 	}
 
