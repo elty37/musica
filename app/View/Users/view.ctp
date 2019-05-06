@@ -36,8 +36,8 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('Edit User'), array('action' => 'edit', $user['User']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete User'), array('action' => 'delete', $user['User']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $user['User']['id']))); ?> </li>
+		<li><?php echo $this->Html->link(__('Edit User'), array('action' => 'edit', $user['User']['user_id'])); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Delete User'), array('action' => 'delete', $user['User']['user_id']), array('confirm' => __('Are you sure you want to delete # %s?', $user['User']['user_id']))); ?> </li>
 		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Conductors'), array('controller' => 'conductors', 'action' => 'index')); ?> </li>
@@ -105,9 +105,6 @@
 			<td><?php echo $playLog['created']; ?></td>
 			<td><?php echo $playLog['modified']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'play_logs', 'action' => 'view', $playLog['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'play_logs', 'action' => 'edit', $playLog['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'play_logs', 'action' => 'delete', $playLog['id']), array('confirm' => __('Are you sure you want to delete # %s?', $playLog['id']))); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
