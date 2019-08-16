@@ -1,0 +1,61 @@
+body {
+    background-color:#E0FFFF;    
+}
+.login_header, .login_footer{
+}
+.global-navi, .breadcrumb-area, #id-title h1, .contant-title h2, .contant-title h1 {
+    font-family: 'Baloo Bhai', 'Nico Moji', cursive;    
+}
+.navbar {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+}
+.navbar-nav a{
+    text-align:center
+}
+#id-title h1, .contant-title h2, .contant-title h1 {
+    color: #6594e0;
+    border-bottom: dashed 2px #6594e0;
+}
+#id-title h1, .contant-title h1 {
+    margin-bottom: 20px;
+}
+.form-group span {
+    font-family: 'Baloo Bhai', cursive;    
+}
+.main {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    margin: auto;
+    width: 128px;
+    height:300px;
+}
+.login_info{
+    background-color:#D7E7AF;
+    color: #777;
+    font-size: 12px
+}
+.login_info p{
+    margin-bottom: inherit;
+}
+
+.btn, span, .row, .task_label, .task_value {
+    font-family: 'Meiryo UI', cursive;    
+}
+.manager_menu {
+    background-color:cadetblue;
+}
+.edit_area {
+    background-color: #fff;
+    height: 70vh;
+}
+svg {
+    margin-left: -1px;
+}
+.commentbtn{
+    text-align: right;
+}

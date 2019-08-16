@@ -1,56 +1,37 @@
-<div class="users index">
-	<h2><?php echo __('Users'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<thead>
-	<tr>
-			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('user_name'); ?></th>
-			<th><?php echo $this->Paginator->sort('role'); ?></th>
-			<th><?php echo $this->Paginator->sort('password'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php foreach ($users as $user): ?>
-	<tr>
-		<td><?php echo h($user['User']['user_id']); ?>&nbsp;</td>
-		<td><?php echo h($user['User']['user_name']); ?>&nbsp;</td>
-		<td><?php echo h($user['User']['role']); ?>&nbsp;</td>
-		<td><?php echo h($user['User']['password']); ?>&nbsp;</td>
-		<td><?php echo h($user['User']['created']); ?>&nbsp;</td>
-		<td><?php echo h($user['User']['modified']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $user['User']['user_id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $user['User']['user_id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $user['User']['user_id']), array('confirm' => __('Are you sure you want to delete # %s?', $user['User']['user_id']))); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</tbody>
-	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-		'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	));
-	?>	</p>
-	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-	?>
-	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Conductors'), array('controller' => 'conductors', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Conductor'), array('controller' => 'conductors', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Play Logs'), array('controller' => 'play_logs', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Play Log'), array('controller' => 'play_logs', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+                <div class="breadcrumb-area">
+                    <nav aria-label="パンくずリスト">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">ホーム</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Excelファイルのアップロード</li>
+                      </ol>
+                    </nav>
+                </div>
+                <div class="mx-auto">
+                  <form method="post" action="./FrontController.php" enctype="multipart/form-data">
+
+                    <div class="col-sm">
+                        <div id="id-title">
+                                <h1>Excelファイルのアップロード</h1>
+                        </div>
+                        <div id="id-title">
+                        </div>
+                        <div class="form-group form-inline">
+                            <label>
+                                <span class="btn btn-primary">
+                                    ファイルを選択
+                                    <input type="file" name="csvfile" style="display:none">
+                                </span>
+                            </label>
+                            <div id="id-filename">
+
+                            </div>
+                    </div>
+                        <div class="form-group">
+                            <div class="form-input">
+                            <input class="btn btn-info" type=submit name="send" value="send" />
+                            <input type="hidden" name="actionId" value="001" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                </div>                
