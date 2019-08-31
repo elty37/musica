@@ -4,3 +4,5 @@ $(document).on('change', ':file', function() {
     label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
     $('#id-filename').html(label);
 });
+
+Vue.use(window["vue-js-modal"].default);
