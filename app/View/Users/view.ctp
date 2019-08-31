@@ -47,8 +47,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-sm d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary">追加</button>
-                                {{currentTaskIndex}}
+                                <button type="submit" class="btn btn-primary btn-lg">追加</button>
                             </div>
                         </div>
                     </div>
