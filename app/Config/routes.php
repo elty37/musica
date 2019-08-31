@@ -42,3 +42,11 @@
  * the built-in default routes.
  */
 	require CAKE . 'Config' . DS . 'routes.php';
+
+    // 拡張子.jsonの呼び出しを許可
+    // 呼び出した場合、RequestHandlerComponentが自動でJSONにフォーマットしてくれる
+    Router::parseExtensions('json');
+
+    // 対象のルートを追加
+    // `ext`を指定することで、拡張子を強制的に付けてくれる
+    Router::connect('/api/:action', array('controller' => 'api', 'ext' => 'json'));
