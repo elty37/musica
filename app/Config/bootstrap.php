@@ -111,3 +111,17 @@ CakeLog::config('error', array(
 ));
 CakePlugin::load('DebugKit');
 
+/**
+ * PHP拡張読み込み
+ * Extensionディレクトリ内のファイルを全てrequireする
+ */
+$extension_path = APP.DS.'Config'.DS.'Extension'.DS;
+if ($handle = opendir($extension_path)) {
+  while (false !== ($file = readdir($handle))) {
+    $filename = $extension_path.$file;
+    if (file_exists($filename) && !is_dir($filename)) {
+      require_once($filename);
+    }
+  }
+  closedir($handle);
+}
