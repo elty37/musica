@@ -36,7 +36,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue-js-modal@1.3.28/dist/index.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Baloo+Bhai' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/2b2d907d83.js"></script>
@@ -58,10 +58,8 @@
                   <a href="#" class="navbar-brand">Menu</a>
                     <div class="navbar-collapse" id="navmenu1">
                         <div class="navbar-nav">
-                          <a class="nav-item nav-link" href="#">Excelファイルのアップロード</a>
-                          <a class="nav-item nav-link" href="#">Excelファイルのダウンロード</a>
                           <a class="nav-item nav-link" href="#">ワークフロー</a>
-                          <a class="nav-item nav-link manager_menu" href="#">メンバー</a>
+                          <a class="nav-item nav-link" href="#">メンバー</a>
                           <a class="nav-item nav-link manager_menu" href="#">ロール</a>
                         </div>
                     </div>
