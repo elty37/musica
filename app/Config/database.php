@@ -70,9 +70,9 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => '160.16.110.61',
-		'login' => 'musicauser',
-		'password' => 'musica',
-		'database' => 'musica',
+		'login' => 'lulu_user',
+		'password' => 'p8cBHC{S!6(vuw*WmH=PjKGsI#)]TkEJ{7(m.AcB=c-.,ysh:D',
+		'database' => 'lulu',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);

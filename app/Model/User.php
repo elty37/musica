@@ -40,9 +40,9 @@ class User extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'role' => array(
+		'role_id' => array(
 			'boolean' => array(
-				'rule' => array('boolean'),
+				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -63,40 +63,5 @@ class User extends AppModel {
 	);
 
 	// The Associations below have been created with all possible keys, those that are not needed can be removed
-
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'Conductor' => array(
-			'className' => 'Conductor',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'PlayLog' => array(
-			'className' => 'PlayLog',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-	);
 
 }
