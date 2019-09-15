@@ -55,9 +55,8 @@ class WorkFlowDetailsController extends AppController {
 				$this->Flash->error(__('The work flow detail could not be saved. Please, try again.'));
 			}
 		}
-		$workFlowDetails = $this->WorkFlowDetail->WorkFlowDetail->find('list');
-		$workFlowHeads = $this->WorkFlowDetail->WorkFlowHead->find('list');
-		$this->set(compact('workFlowDetails', 'workFlowHeads'));
+		$workFlowDetails = $this->WorkFlowDetail->find('list');
+		$this->set(compact('workFlowDetails'));
 	}
 
 /**
@@ -82,9 +81,8 @@ class WorkFlowDetailsController extends AppController {
 			$options = array('conditions' => array('WorkFlowDetail.' . $this->WorkFlowDetail->primaryKey => $id));
 			$this->request->data = $this->WorkFlowDetail->find('first', $options);
 		}
-		$workFlowDetails = $this->WorkFlowDetail->WorkFlowDetail->find('list');
-		$workFlowHeads = $this->WorkFlowDetail->WorkFlowHead->find('list');
-		$this->set(compact('workFlowDetails', 'workFlowHeads'));
+		$workFlowDetails = $this->WorkFlowDetail->find('list');
+		$this->set(compact('workFlowDetails'));
 	}
 
 /**

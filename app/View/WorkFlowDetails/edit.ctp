@@ -1,27 +1,22 @@
-<div class="workFlowDetails form">
-<?php echo $this->Form->create('WorkFlowDetail'); ?>
-	<fieldset>
-		<legend><?php echo __('Edit Work Flow Detail'); ?></legend>
-	<?php
-		echo $this->Form->input('work_flow_detail_id');
-		echo $this->Form->input('work_flow_head_id');
-		echo $this->Form->input('task_name');
-		echo $this->Form->input('task_state');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<div class="breadcrumb-area">
+    <nav aria-label="パンくずリスト">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">ホーム</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ワークフロー</li>
+      </ol>
+    </nav>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+<div class="mx-auto">
+  <form method="post" action="./FrontController.php" enctype="multipart/form-data">
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('WorkFlowDetail.id')), array('confirm' => __('Are you sure you want to delete # %s?', $this->Form->value('WorkFlowDetail.id')))); ?></li>
-		<li><?php echo $this->Html->link(__('List Work Flow Details'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Work Flow Details'), array('controller' => 'work_flow_details', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Work Flow Detail'), array('controller' => 'work_flow_details', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Work Flow Heads'), array('controller' => 'work_flow_heads', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Work Flow Head'), array('controller' => 'work_flow_heads', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Work Flow Detail Comments'), array('controller' => 'work_flow_detail_comments', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Work Flow Detail Comment'), array('controller' => 'work_flow_detail_comments', 'action' => 'add')); ?> </li>
-	</ul>
+    <div class="col-sm">
+        <div id="id-title">
+                <h1>ワークフロー</h1>
+        </div>
+        <style>
+        </style>
+        <script>
+        </script>
+    </div>
+</form>
 </div>

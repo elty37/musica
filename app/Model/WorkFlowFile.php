@@ -38,40 +38,5 @@ class WorkFlowFile extends AppModel {
 
 	// The Associations below have been created with all possible keys, those that are not needed can be removed
 
-/**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'WorkFlowFiles' => array(
-			'className' => 'WorkFlowFiles',
-			'foreignKey' => 'work_flow_files_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'WorkFlowHead' => array(
-			'className' => 'WorkFlowHead',
-			'foreignKey' => 'work_flow_file_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
 
 }

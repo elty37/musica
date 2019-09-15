@@ -36,7 +36,7 @@ class WorkFlowHeadsController extends AppController {
 		if (!$this->WorkFlowHead->exists($id)) {
 			throw new NotFoundException(__('Invalid work flow head'));
 		}
-		$options = array('conditions' => array('WorkFlowHead.' . $this->WorkFlowHead->primaryKey => $id));
+		$options = array('conditions' => array('WorkFlowHead.id' => $id));
 		$this->set('workFlowHead', $this->WorkFlowHead->find('first', $options));
 	}
 
