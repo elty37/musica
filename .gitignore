@@ -32,3 +32,6 @@ Thumbs.db
 # musica custom #
 #################
 /.vagrant
+Dockerfile
+php.ini
+.vscode/*
