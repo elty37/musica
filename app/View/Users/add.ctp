@@ -28,6 +28,30 @@
 							"id" => "id-user_id",
 							"type" => "text",
 						));
+						echo $this->Form->input('mail_address', array(
+							"label" => array(
+								'text' => "メールアドレス",
+								"class" => "input_label col-sm-4",
+							),
+							"div" => array(
+								"class" => "form-inline row border-bottom m-4 p-2",
+							),
+							"class" => "form-control col-sm-8",
+							"id" => "id-mail_address",
+							"type" => "text",
+						));
+						echo $this->Form->input('password', array(
+							"label" => array(
+								'text' => "パスワード",
+								"class" => "input_label col-sm-4",
+							),
+							"div" => array(
+								"class" => "form-inline row border-bottom border-bottom m-4 p-1",
+							),
+							"class" => "form-control col-sm-8",
+							"id" => "id-password",
+							"type" => "password",
+						));
 						echo $this->Form->input('role_id',
 							array(
 							"label" => array(
@@ -42,18 +66,7 @@
 							"type" => "select",
 							"options" => $roles,
 						));
-						echo $this->Form->input('password', array(
-							"label" => array(
-								'text' => "パスワード",
-								"class" => "input_label col-sm-4",
-							),
-							"div" => array(
-								"class" => "form-inline row border-bottom border-bottom m-4 p-1",
-							),
-							"class" => "form-control col-sm-8",
-							"id" => "id-password",
-							"type" => "password",
-						));
+
 					?>
 				<?php echo $this->Form->input('メンバーの追加', array(
 					"label" => false,
