@@ -13,7 +13,26 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator', 'Flash');
+	public $components = array(
+		'Paginator',
+		'Flash',
+		'Auth' => array(
+            'loginRedirect' => array(
+                'controller' => 'users',
+                'action' => 'index'
+            ),
+            'logoutRedirect' => array(
+                'controller' => 'users',
+                'action' => 'login',
+                'home',
+            ),
+            'authenticate' => array(
+                'Form' => array(
+                    'passwordHasher' => 'Blowfish',
+					'fields' => array('username' => 'mail_address'),
+				),
+            )
+        ));
 	public $uses = array('User', 'Role');
 	public $paginate = array(
 		'User',
@@ -25,7 +44,12 @@ class UsersController extends AppController {
 				'Post.title' => 'asc'
 			)	
 		),
-    );
+	);
+	public function beforeFilter()
+	{
+		parent::beforeFilter();
+		$this->Auth->allow('login','add');
+	}
 /**
  * index method
  *
@@ -91,8 +115,11 @@ class UsersController extends AppController {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
+		$password = Hash::get($this->request->query, "password", self::DEFALUT_PAGE);
+		$input_user = $this->request->data;
+		$input_user["User"]["password"] = AuthComponent::password($password);
 		if ($this->request->is(array('post', 'put'))) {
-			if ($this->User->save($this->request->data)) {
+			if ($this->User->save($input_user)) {
 				$this->Flash->success(__('The user has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
@@ -156,5 +183,18 @@ class UsersController extends AppController {
 		$this->paginate = $paginate;
 		$this->set('result', $this->Paginator->paginate());
 		$this->render('index');
+	}
+	public function login() {
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
+				$this->redirect($this->Auth->redirect());
+			} else {
+				$this->Flash->error(__('Invalid username or password, try again'));
+			}
+		}
+	}
+	
+	public function logout() {
+		$this->redirect($this->Auth->logout());
 	}
 }
