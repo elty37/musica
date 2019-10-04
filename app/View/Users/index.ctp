@@ -17,14 +17,14 @@
             
             <div class="row">
                 <div class="col-sm-2 d-flex align-items-end">
-                    <button type="button" name="addWorkflow" class="btn btn-info">メンバーの追加</button>
+                    <a class="btn btn-info" href="/users/add">メンバーの追加</a>
                 </div>
             </div>
             <div class="row border-bottom" v-for="(member, index) in members">
                 <div class="col-sm-1 d-flex align-items-end" v-if="index > 0">{{member.id}}</div>
                 <div class="col-sm-1 d-flex align-items-end" v-else></div>
                 <div class="col-sm-3 d-flex align-items-end">
-                    <a href="#" class="btn btn-link p-0">
+                    <a v-bind:href=member.url class="btn btn-link p-0">
                         {{member.member_name}}
                     </a>
                 </div>
@@ -208,6 +208,7 @@
 
         </style>
         <script>
+          var add_url = "/users/edit/";
             Vue.component('modal', {
               template: '#modal-template'
             })
@@ -221,21 +222,24 @@
                       modified: '最終更新日',
                       member_name: 'メンバー名',
                       role: 'ロール',
-                      created: '作成日'
+                      created: '作成日',
+                      url:""
                   },
                   {
-                      id : "1",
+                      id : "5",
                       modified: '2019-09-12',
                       member_name: '藤宮　彩',
                       role: '1st.xlsx',
-                      created: '2019-08-16'
+                      created: '2019-08-16',
+                      url: add_url + "5"
                   },
                   {
-                      id : "2",
+                      id : "6",
                       modified: '2019-08-22',
                       member_name: '蓮ケ谷　佳音',
                       role: '管理者',
-                      created: '2019-08-16'
+                      created: '2019-08-16',
+                      url: add_url + "6"
                   }
                 ],
                   showModal: false,
