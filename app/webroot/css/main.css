@@ -1,9 +1,7 @@
 body {
     background-color:#E0FFFF;    
 }
-.login_header, .login_footer{
-}
-.global-navi, .breadcrumb-area, #id-title h1, .contant-title h2, .contant-title h1 {
+.global-navi, .breadcrumb-area, #id-title h1, .contant-title h2, .contant-title h1{
     font-family: 'Baloo Bhai', 'Nico Moji', cursive;    
 }
 .navbar {
@@ -42,10 +40,14 @@ body {
 .login_info p{
     margin-bottom: inherit;
 }
-
-.btn, span, .row, .task_label, .task_value {
-    font-family: 'Meiryo UI', cursive;    
+label {
+    font-size: 16px;
+    text-align: left;
 }
+.btn, span, .row, .task_label, .task_value, .input_label {
+    font-family: 'Meiryo UI', cursive; 
+}
+
 .manager_menu {
     background-color:cadetblue;
 }
