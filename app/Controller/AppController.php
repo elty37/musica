@@ -31,14 +31,33 @@ App::uses('Controller', 'Controller');
  * @link		https://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+  const LIMIT = 500;
+  const DEFALUT_PER_PAGE = 50;
+  const DEFALUT_PAGE = 1;
+  private $from_page = false;
 	public $components = array(
         'DebugKit.Toolbar',
     );
         
-    // JsonViewとJsonMultiByteViewを差し替え
+    public function beforeFilter()
+    {
+      $page_token = Hash::get($this->request->query, "token", null);
+      $session_token = CakeSession::read('token');
+      if ($page_token == $session_token) {
+        //トークンが一致すればページからの呼び出しと判断
+          $this->from_page = true;
+          return;
+      }
+      // 以下、API呼び出し時の認証処理
+    }
+    /**
+     * api呼び出しかページ呼び出しかをトークンで判定。
+     */
     public function beforeRender() {
-        if ($this->viewClass === 'Json') {
+        if (!$this->from_page) {
+          // JsonViewとJsonMultiByteViewを差し替え
           $this->viewClass = 'JsonMultiByte';
+          $this->set('_serialize', 'result');
         }
     }
 }
