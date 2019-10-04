@@ -125,4 +125,36 @@ class UsersController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+
+	/**
+	 * User一覧取得Ajax
+	 * @param int $per_page 1ページのデータ数
+	 * @param int $page 何ページ目か
+ 	 */
+	public function search() {
+		$page = Hash::get($this->request->query, "page", self::DEFALUT_PAGE);
+		$per_page = Hash::get($this->request->query, "per_page", self::DEFALUT_PER_PAGE);
+		$user_id = Hash::get($this->request->query, "user_id");
+		$user_name = Hash::get($this->request->query, "user_name");
+		$role_id = Hash::get($this->request->query, "role_id");
+		$paginate =array(
+			'User',
+			array(
+				'page' => $page,
+				'fields' => array('User.id', 'User.role_id', 'User.created', 'User.modified',),
+				'limit' => $per_page,
+				'conditions' => array(
+					'User.id' => $user_id,
+					'User.user_name' => $user_name,
+					'User.role_id' => $role_id,
+				),
+				'order' => array(
+					'User.user_id' => 'asc',
+				)
+			)
+		);
+		$this->paginate = $paginate;
+		$this->set('result', $this->Paginator->paginate());
+		$this->render('index');
+	}
 }
