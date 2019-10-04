@@ -9,11 +9,6 @@ App::uses('AppModel', 'Model');
  */
 class User extends AppModel {
 
-	/**
-	 * @var string primaryKey
-	 */
-	public $primaryKey = 'user_id';
-
 /**
  * Validation rules
  *
@@ -41,7 +36,7 @@ class User extends AppModel {
 			),
 		),
 		'role_id' => array(
-			'boolean' => array(
+			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
