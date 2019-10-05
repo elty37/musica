@@ -207,55 +207,118 @@
             }
 
         </style>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
         <script>
           var add_url = "/users/edit/";
-            Vue.component('modal', {
-              template: '#modal-template'
-            })
-            var list = new Vue({
-              el: '#id-list',
-              data: {
-                parentMessage: 'Parent',
-                members: [
-                  {
-                      id : "ID",
-                      modified: '最終更新日',
-                      member_name: 'メンバー名',
-                      role: 'ロール',
-                      created: '作成日',
-                      url:""
+          var mixin = {
+                ajax:{
+                  data:{
+                    error:0, //エラー状態
+                    loading:true, //通信状態
+                    result:{} //取得結果格納用
                   },
-                  {
-                      id : "5",
-                      modified: '2019-09-12',
-                      member_name: '藤宮　彩',
-                      role: '1st.xlsx',
-                      created: '2019-08-16',
-                      url: add_url + "5"
-                  },
-                  {
-                      id : "6",
-                      modified: '2019-08-22',
-                      member_name: '蓮ケ谷　佳音',
-                      role: '管理者',
-                      created: '2019-08-16',
-                      url: add_url + "6"
+                  methods:{
+                    showFileName : function(event) {
+                                      var input = $(event.target);
+                                      var numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                                      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                                      this.fileName = label;
+                                  },
+                      window:onload = function(){
+                      //Ajaxを実行
+                      var _this = this;
+                      _this.loading = true;
+                      $.ajax({
+                        url: "/users/",
+                        type: 'GET',
+                        dataType: 'JSON',
+                        timeout : 30000,
+                        data:{}
+                      })
+                      .done(function(response) {
+                        //結果をresultに格納、各種状態管理用の変数を完了ステータスに変更
+                        _this.error = 0;
+                        _this.loading = false;
+                        _this.result = response;
+                        console.log(response);
+                      })
+                      .fail(function(error) {
+                        //通信エラー時の再試行。
+                        //再試行回数が指定数に達した場合は状態管理用の変数を更新しAjaxを停止
+                        console.log(error);
+                        if(_this.error <= 5){
+                          _this.error++;
+                          _this.getData();
+                        }else{
+                          _this.error = true;
+                          _this.loading = false;
+                        }
+                      });                    }
+
                   }
-                ],
+                }
+              }
+              var app = new Vue({
+                el:'#app',
+                mixins: [mixin.ajax],
+                data:{
+                  request:{
+                    url:'/users/', //呼び出しurl
+                    data:{ //リクエストデータ
+                      date:'2017/12/31'
+                    }
+                  },
                   showModal: false,
                   currentTaskIsFinished: false,
                   fileName : ""
-
-              },
-                methods:{
-                    showFileName : function(event) {
-                        var input = $(event.target);
-                        var numFiles = input.get(0).files ? input.get(0).files.length : 1,
-                        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                        this.fileName = label;
-                    }
                 }
+              });
+            Vue.component('modal', {
+              template: '#modal-template'
             })
+            // var list = new Vue({
+            //   el: '#id-list',
+            //   data: {
+            //     parentMessage: 'Parent',
+            //     members: [
+            //       {
+            //           id : "ID",
+            //           modified: '最終更新日',
+            //           member_name: 'メンバー名',
+            //           role: 'ロール',
+            //           created: '作成日',
+            //           url:""
+            //       },
+            //       {
+            //           id : "5",
+            //           modified: '2019-09-12',
+            //           member_name: '藤宮　彩',
+            //           role: '1st.xlsx',
+            //           created: '2019-08-16',
+            //           url: add_url + "5"
+            //       },
+            //       {
+            //           id : "6",
+            //           modified: '2019-08-22',
+            //           member_name: '蓮ケ谷　佳音',
+            //           role: '管理者',
+            //           created: '2019-08-16',
+            //           url: add_url + "6"
+            //       }
+            //     ],
+
+
+            //   },
+            //     methods:{
+            //         showFileName : function(event) {
+            //             var input = $(event.target);
+            //             var numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            //             label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            //             this.fileName = label;
+            //         },
+                  
+            // })
         </script>
     </div>
 </form>

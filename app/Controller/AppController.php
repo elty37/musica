@@ -41,14 +41,17 @@ class AppController extends Controller {
         
     public function beforeFilter()
     {
-      $page_token = Hash::get($this->request->query, "token", null);
-      $session_token = CakeSession::read('token');
-      if ($page_token == $session_token) {
-        //トークンが一致すればページからの呼び出しと判断
-          $this->from_page = true;
-          return;
+      $page_token = Hash::get($this->request->query, "access_token", null);
+      $session_token = CakeSession::read('access_token');
+      if (is_null($session_token)) {
+      // アクセストークンがセッションにないときはAPI呼び出し時の認証処理
+      } else {
+        if ($page_token == $session_token || $this->request->is('get')) {
+          //トークンが一致もしくはページ遷移ならページからの呼び出しと判断
+            $this->from_page = true;
+            return;
+        }  
       }
-      // 以下、API呼び出し時の認証処理
     }
     /**
      * api呼び出しかページ呼び出しかをトークンで判定。

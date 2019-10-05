@@ -48,8 +48,9 @@ class UsersController extends AppController {
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
-		$this->Auth->allow('login','add');
+		$this->Auth->allow('login', 'index');
 	}
+
 /**
  * index method
  *
@@ -59,12 +60,16 @@ class UsersController extends AppController {
 		if ($this->request->is('post')) {
 			if (is_null($id)) {
 				$this->add();
+				return;
 			}
 			$this->edit($id);
+			return;
 		} elseif ($this->request->is('delete')) {
 			$this->delete($id);
+			return;
 		} elseif ($this->request->is('get')) {
 			$this->search();
+			return;
 		}
 		$this->search();
 	}
@@ -184,16 +189,22 @@ class UsersController extends AppController {
 		$this->set('result', $this->Paginator->paginate());
 		$this->render('index');
 	}
+	/**
+	 * ログイン(フォーム認証）
+	 */
 	public function login() {
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
+				$this->Auth->setToken();
 				$this->redirect($this->Auth->redirect());
 			} else {
 				$this->Flash->error(__('Invalid username or password, try again'));
 			}
 		}
 	}
-	
+	/**
+	 * ログアウト
+	 */
 	public function logout() {
 		$this->redirect($this->Auth->logout());
 	}

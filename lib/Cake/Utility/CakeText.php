@@ -707,4 +707,13 @@ class CakeText {
 
 		return array_pop($list);
 	}
+
+	/**
+	 * Generates the random String the length is $length
+	 * @param int $length
+	 * @return string
+	 */
+	public static function getRandomString($length = 8) {
+		return array_reduce(range(1, $length), function($p){ return $p.str_shuffle('1234567890abcdefghijklmnopqrstuvwxyz')[0]; });
+	}
 }

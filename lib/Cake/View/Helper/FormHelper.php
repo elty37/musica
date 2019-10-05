@@ -474,7 +474,8 @@ class FormHelper extends AppHelper {
 		if (!empty($append)) {
 			$append = $this->Html->useTag('hiddenblock', $append);
 		}
-
+		// set access_token
+		$append .= $this->Html->useTag('hidden', 'access_token', CakeSession::read('access_token'));
 		if ($model !== false) {
 			$this->setEntity($model, true);
 			$this->_introspectModel($model, 'fields');

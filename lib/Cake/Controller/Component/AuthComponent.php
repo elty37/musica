@@ -852,5 +852,11 @@ class AuthComponent extends Component {
 		}
 		$this->Flash->set($message, $this->flash);
 	}
+/**
+ * トークンをセッションにセット
+ */
+	public function setToken() {
+		CakeSession::write('access_token', CakeText::getRandomString(255));
+	}
 
 }
