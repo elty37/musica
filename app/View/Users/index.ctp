@@ -20,36 +20,49 @@
                     <a class="btn btn-info" href="/users/add">メンバーの追加</a>
                 </div>
             </div>
-            <div class="row border-bottom" v-for="(member, index) in members">
-                <div class="col-sm-1 d-flex align-items-end" v-if="index > 0">{{member.id}}</div>
-                <div class="col-sm-1 d-flex align-items-end" v-else></div>
+            <div class="row border-bottom" v-for="(result, index) in results">
+                <div class="col-sm-1 d-flex align-items-end"></div>
                 <div class="col-sm-3 d-flex align-items-end">
-                    <a v-bind:href=member.url class="btn btn-link p-0">
-                        {{member.member_name}}
+                      ユーザ名
+                </div>
+                <div class="col-sm-2 d-flex align-items-end">
+                      グループ
+                </div>
+                <div class="col-sm-2 d-flex align-items-end">
+                    <a href="#" class="btn btn-link p-0">
+                      作成日
+                    </a>
+                </div>
+                <div class="col-sm-2 d-flex align-items-end">
+                      更新日
+                </div>
+                <div class="col-sm-2 d-flex align-items-end">
+                  操作
+                </div>
+              </div>
+              <div class="row border-bottom" v-for="(result, index) in results">
+                <div class="col-sm-1 d-flex align-items-end"></div>
+                <div class="col-sm-3 d-flex align-items-end">
+                    <a v-bind:href=result.url class="btn btn-link p-0">
+                        {{result.User.user_name}}
                     </a>
                 </div>
                 <div class="col-sm-2 d-flex align-items-end">
                     <a href="#" class="btn btn-link p-0">
-                        {{member.role}}
+                        {{result.User.role_id}}
                     </a>
                 </div>
-                <div class="col-sm-2 d-flex align-items-end" v-if="index > 0">
-                        {{member.created}}
-                </div>
-                <div class="col-sm-2 d-flex align-items-end" v-else>
+                <div class="col-sm-2 d-flex align-items-end">
                     <a href="#" class="btn btn-link p-0">
-                        {{member.created}}
+                        {{result.User.created}}
                     </a>
                 </div>
-                <div class="col-sm-2 d-flex align-items-end" v-if="index > 0">
-                        {{member.modified}}
-                </div>
-                <div class="col-sm-2 d-flex align-items-end" v-else>
+                <div class="col-sm-2 d-flex align-items-end">
                     <a href="#" class="btn btn-link p-0">
-                        {{member.modified}}
+                        {{result.User.modified}}
                     </a>
                 </div>
-                <div class="col-sm-2 d-flex align-items-end" v-if="index > 0">
+                <div class="col-sm-2 d-flex align-items-end">
 
 <!-- template for the modal component -->
 <script type="text/x-template" id="modal-template">
@@ -123,8 +136,7 @@
                         <i class="far fa-trash-alt"></i>
                     </button>
                 </div>
-                <div class="col-sm-2" v-else>
-                    操作
+                <div class="col-sm-2">
                 </div>
             </div>                                                
         </div>
@@ -211,69 +223,73 @@
 
         <script>
           var add_url = "/users/edit/";
+          var res = {};
           var mixin = {
-                ajax:{
-                  data:{
-                    error:0, //エラー状態
-                    loading:true, //通信状態
-                    result:{} //取得結果格納用
-                  },
-                  methods:{
-                    showFileName : function(event) {
-                                      var input = $(event.target);
-                                      var numFiles = input.get(0).files ? input.get(0).files.length : 1,
-                                      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                                      this.fileName = label;
-                                  },
-                      window:onload = function(){
-                      //Ajaxを実行
-                      var _this = this;
-                      _this.loading = true;
-                      $.ajax({
-                        url: "/users/",
-                        type: 'GET',
-                        dataType: 'JSON',
-                        timeout : 30000,
-                        data:{}
-                      })
-                      .done(function(response) {
-                        //結果をresultに格納、各種状態管理用の変数を完了ステータスに変更
-                        _this.error = 0;
-                        _this.loading = false;
-                        _this.result = response;
-                        console.log(response);
-                      })
-                      .fail(function(error) {
-                        //通信エラー時の再試行。
-                        //再試行回数が指定数に達した場合は状態管理用の変数を更新しAjaxを停止
-                        console.log(error);
-                        if(_this.error <= 5){
-                          _this.error++;
-                          _this.getData();
-                        }else{
-                          _this.error = true;
-                          _this.loading = false;
-                        }
-                      });                    }
 
-                  }
-                }
               }
-              var app = new Vue({
-                el:'#app',
-                mixins: [mixin.ajax],
-                data:{
-                  request:{
-                    url:'/users/', //呼び出しurl
-                    data:{ //リクエストデータ
-                      date:'2017/12/31'
+                var app = new Vue({
+                    el: '#id-list',
+                    data: {
+                      parentMessage: 'Parent',
+                      results: <?= $result; ?>
+
+                    },
+                    ajax:{
+                      data:{
+                        error:0, //エラー状態
+                        loading:true, //通信状態
+                        result:{} //取得結果格納用
+                      }
+                    },
+                    methods:{
+                      showFileName : function(event) {
+                        var input = $(event.target);
+                        var numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                        this.fileName = label;
+                      },
+                      // window:onload = function(){
+                      //   //Ajaxを実行
+                      //   var _this = this;
+                      //   _this.loading = true;
+                      //   $.ajax({
+                      //     url: "/users/",
+                      //     type: 'GET',
+                      //     dataType: 'JSON',
+                      //     timeout : 30000,
+                      //     data:{
+                      //       "user_id": 14
+                      //       //検索条件はここ
+                      //     }
+                      //   })
+                      //   .done(function(response) {
+                      //     //結果をresultに格納、各種状態管理用の変数を完了ステータスに変更
+                      //     _this.error = 0;
+                      //     _this.loading = false;
+                      //     console.log(response);
+                      //     console.log(this.members);
+                      //     this.members=[];
+                      //     for (var i=0; i<response.length; i++) {
+                      //       this.members.push(response[i]["User"]);
+                      //     }
+                      //   })
+                      //   .fail(function(error) {
+                      //     //通信エラー時の再試行。
+                      //     //再試行回数が指定数に達した場合は状態管理用の変数を更新しAjaxを停止
+                      //     if(_this.error <= 5){
+                      //       _this.error++;
+                      //       _this.getData();
+                      //     }else{
+                      //       _this.error = true;
+                      //       _this.loading = false;
+                      //       return [];
+                      //     }
+                      //   });                    
+                      // }
                     }
-                  },
-                  showModal: false,
-                  currentTaskIsFinished: false,
-                  fileName : ""
-                }
-              });
+                  });
+
+
             Vue.component('modal', {
               template: '#modal-template'
             })

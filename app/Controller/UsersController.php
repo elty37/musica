@@ -41,14 +41,14 @@ class UsersController extends AppController {
 			'fields' => array('User.id', 'User.role_id', 'User.created', 'User.modified',),
 			'limit' => self::DEFALUT_PER_PAGE,
 			'order' => array(
-				'Post.title' => 'asc'
+				'User.id' => 'asc'
 			)	
 		),
 	);
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
-		$this->Auth->allow('login', 'index');
+		$this->Auth->allow('login');
 	}
 
 /**
@@ -169,25 +169,26 @@ class UsersController extends AppController {
 		$user_id = Hash::get($this->request->query, "user_id");
 		$user_name = Hash::get($this->request->query, "user_name");
 		$role_id = Hash::get($this->request->query, "role_id");
-		$paginate =array(
-			'User',
-			array(
-				'page' => $page,
-				'fields' => array('User.id', 'User.role_id', 'User.created', 'User.modified',),
-				'limit' => $per_page,
-				'conditions' => array(
-					'User.id' => $user_id,
-					'User.user_name' => $user_name,
-					'User.role_id' => $role_id,
-				),
-				'order' => array(
-					'User.user_id' => 'asc',
-				)
+		$conditions = array(
+			'User.id' => $user_id,
+			'User.user_name' => $user_name,
+			'User.role_id' => $role_id,
+		);
+		$paginate =	array(
+			'page' => $page,
+			'fields' => array('id', 'user_name', 'role_id', 'created', 'modified',),
+			'limit' => $per_page,
+			'conditions' => array(
+				'or' => $conditions,
+			),
+			'order' => array(
+				'User.id' => 'asc',
 			)
 		);
-		$this->paginate = $paginate;
-		$this->set('result', $this->Paginator->paginate());
+		$this->Paginator->settings = $paginate;
+		$this->setJsonResponce($this->Paginator->paginate());
 		$this->render('index');
+
 	}
 	/**
 	 * ログイン(フォーム認証）

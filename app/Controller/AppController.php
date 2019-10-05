@@ -43,7 +43,7 @@ class AppController extends Controller {
     {
       $page_token = Hash::get($this->request->query, "access_token", null);
       $session_token = CakeSession::read('access_token');
-      if (is_null($session_token)) {
+      if (is_null($session_token) && $this->request->url != 'users/login' || $this->request->is('ajax')) {
       // アクセストークンがセッションにないときはAPI呼び出し時の認証処理
       } else {
         if ($page_token == $session_token || $this->request->is('get')) {
@@ -62,5 +62,13 @@ class AppController extends Controller {
           $this->viewClass = 'JsonMultiByte';
           $this->set('_serialize', 'result');
         }
+    }
+
+    protected function setJsonResponce($result = array()) {
+      if ($this->from_page) {
+        $this->set('result', json_encode($result));
+      } else {
+        $this->set(compact('result'));
+      }
     }
 }
