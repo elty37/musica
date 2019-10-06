@@ -51,6 +51,7 @@ class AuthComponent extends Component {
  * @var array
  */
 	public $components = array('Session', 'Flash', 'RequestHandler');
+	public $uses = array('Role');
 
 /**
  * An array of authentication objects to use for authenticating users. You can configure

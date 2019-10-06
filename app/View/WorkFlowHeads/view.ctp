@@ -19,7 +19,7 @@
                 width="1.69in" height="0.713333in"
                 viewBox="0 0 507 214">
                 <path :id="'task-' + workflowDetail.id"
-                        :fill="workflowDetail.task_state" :stroke="workflowDetail.task_state" stroke-width="0" v-on:mouseover="focus(workflowDetail)" v-on:mouseout="releaseFocus(workflowDetail)" v-on:click="displayWorkflowTaskInfo(workflowDetail)"
+                        :fill="workflowDetail.task_state_color" :stroke="workflowDetail.task_state_color" stroke-width="0" v-on:mouseover="focus(workflowDetail)" v-on:mouseout="releaseFocus(workflowDetail)" v-on:click="displayWorkflowTaskInfo(workflowDetail)"
                         d="M 296.00,82.00
                         C 296.00,82.00 0.00,82.00 0.00,82.00
                             0.00,82.00 0.00,132.00 0.00,132.00
@@ -244,13 +244,13 @@
                             contentDiv.append(commentInput);
                             dateDiv.text(getNowDate());
                             /*ログイン情報をバインド*/
-                            nameDiv.text('藤宮');
-                            roleDiv.text('シナリオ');
+                            nameDiv.text('<?php echo $this->Session->read('Auth.User.user_name'); ?>');
+                            roleDiv.text('<?php echo $this->Session->read('Auth.User.role_name'); ?>');
                         } else {
                             contentDiv.text(workflowState.comments[i].comment);
                             dateDiv.text(workflowState.comments[i].created);
-                            nameDiv.text(workflowState.comments[i].userName);
-                            roleDiv.text(workflowState.comments[i].userRole);
+                            nameDiv.text(workflowState.comments[i].user_name);
+                            roleDiv.text(workflowState.comments[i].role_name);
                         }
                         commentDiv.append(dateDiv);
                         commentDiv.append(nameDiv);

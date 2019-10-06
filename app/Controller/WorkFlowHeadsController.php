@@ -18,8 +18,9 @@ class WorkFlowHeadsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
-	public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',);
+public $components = array('Paginator');
+public $helpers = array('Session');
+public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',);
 
 /**
  * index method
@@ -130,13 +131,17 @@ class WorkFlowHeadsController extends AppController {
 
 	private function createViewData($head, $details, $comments){
 		$viewData = $head["WorkFlowHead"];
-		$viewData["workflowDetail"] = array();
+		$viewData["workflowDetails"] = array();
 
 		foreach ($details as $detail) {
 			$detail = $this->convertFromTaskStateToColor($detail);
 			$detail["WorkFlowDetail"]["comments"] = array();
 			foreach ($comments as $comment) {
-				$detail["WorkFlowDetail"]["comments"][] = $comment["WorkFlowDetailComment"];
+				$comment["WorkFlowDetailComment"]["user_name"] = $comment["User"]["user_name"];
+				$comment["WorkFlowDetailComment"]["role_name"] = $comment["Role"]["role_name"];
+				if ($comment["WorkFlowDetailComment"]["work_flow_detail_id"] == $detail["WorkFlowDetail"]["id"]) {
+					$detail["WorkFlowDetail"]["comments"][] = $comment["WorkFlowDetailComment"];
+				}
 			}
 			$viewData["workflowDetails"][] = $detail["WorkFlowDetail"];
 		}
@@ -145,14 +150,20 @@ class WorkFlowHeadsController extends AppController {
 	}
 
 	private function convertFromTaskStateToColor($detail) {
-		$finish = '#c0ff23';
-		$current = '#ffc023';
-		$yet = '#cfcfcf';
+		$finish_color = '#c0ff23';
+		$current_color = '#ffc023';
+		$yet_color = '#cfcfcf';
+		$finish = '完了';
+		$current = '作業中';
+		$yet = '未着手';
 		if ($detail["WorkFlowDetail"]["task_state"] == self::TASK_STATE_FINISH) {
+			$detail["WorkFlowDetail"]["task_state_cokor"] = $finish_color;
 			$detail["WorkFlowDetail"]["task_state"] = $finish;
 		} elseif ($detail["WorkFlowDetail"]["task_state"] == self::TASK_STATE_CURRENT) {
+			$detail["WorkFlowDetail"]["task_state_color"] = $current_color;
 			$detail["WorkFlowDetail"]["task_state"] = $current;
 		} else {
+			$detail["WorkFlowDetail"]["task_state_color"] = $yet_color;
 			$detail["WorkFlowDetail"]["task_state"] = $yet;
 		}
 		return $detail;

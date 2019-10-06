@@ -181,6 +181,19 @@ class UsersController extends AppController {
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
 				$this->Auth->setToken();
+				$login_user = $this->User->find('first', array(
+					'conditions' => array(
+							'id' => $this->Session->read('Auth.User.id'),
+						),
+					)
+				);
+				$login_users_role = $this->Role->find('first', array(
+					'conditions' => array(
+							'id' => $login_user["User"]["role_id"],
+						),
+					)
+				);
+				$this->Session->write('Auth.User.role_name', $login_users_role["Role"]["role_name"]);
 				$this->redirect($this->Auth->redirect());
 			} else {
 				$this->Flash->error(__('Invalid username or password, try again'));
