@@ -39,47 +39,15 @@ class WorkFlowDetailComment extends AppModel {
 
 	// The Associations below have been created with all possible keys, those that are not needed can be removed
 
-/**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'WorkFlowDetailComment' => array(
-			'className' => 'WorkFlowDetailComment',
-			'foreignKey' => 'work_flow_detail_comment_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'WorkFlowDetail' => array(
-			'className' => 'WorkFlowDetail',
-			'foreignKey' => 'work_flow_detail_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
 
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'WorkFlowDetailComment' => array(
-			'className' => 'WorkFlowDetailComment',
-			'foreignKey' => 'work_flow_detail_comment_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
-
+	/**
+	 * タスクIDで取得
+	 */
+	public function findByDetailIds($detailIds = array()) {
+		return $this->find('all', array(
+			'conditions' => array(
+				'work_flow_detail_id' => $detailIds,
+			),
+		));
+	}
 }

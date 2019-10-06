@@ -3,17 +3,23 @@ App::uses('AppController', 'Controller');
 /**
  * WorkFlowHeads Controller
  *
+ * @property WorkFlowDetail $WorkFlowDetail
  * @property WorkFlowHead $WorkFlowHead
+ * @property WorkFlowDetailComment $WorkFlowDetailComment
  * @property PaginatorComponent $Paginator
  */
 class WorkFlowHeadsController extends AppController {
 
+	const TASK_STATE_FINISH = '2';
+	const TASK_STATE_CURRENT = '1';
+	const TASK_STATE_YET = '0';
 /**
  * Components
  *
  * @var array
  */
 	public $components = array('Paginator');
+	public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',);
 
 /**
  * index method
@@ -36,8 +42,23 @@ class WorkFlowHeadsController extends AppController {
 		if (!$this->WorkFlowHead->exists($id)) {
 			throw new NotFoundException(__('Invalid work flow head'));
 		}
-		$options = array('conditions' => array('WorkFlowHead.id' => $id));
-		$this->set('workFlowHead', $this->WorkFlowHead->find('first', $options));
+		// head取得
+		$options = array('conditions' => array('WorkFlowHead.' . $this->WorkFlowHead->primaryKey => $id));
+		$workFlowHead = $this->WorkFlowHead->find('first', $options);
+		// detail取得
+		$workFlowDetails = $this->WorkFlowDetail->findByHeadId($id);
+		$workFlowDetailIds = array();
+		
+		// detail毎のコメントを取得
+		foreach($workFlowDetails as $workFlowDetail) {
+			$workFlowDetailIds[] = $workFlowDetail['WorkFlowDetail']["id"];
+		}
+		$workFlowDetailComments = $this->WorkFlowDetailComment->findByDetailIds($workFlowDetailIds);
+		// 合体
+		$result = $this->createViewData($workFlowHead, $workFlowDetails, $workFlowDetailComments);
+		
+		$this->setJsonResponce($result);
+		
 	}
 
 /**
@@ -105,5 +126,35 @@ class WorkFlowHeadsController extends AppController {
 			$this->Flash->error(__('The work flow head could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
+	}
+
+	private function createViewData($head, $details, $comments){
+		$viewData = $head["WorkFlowHead"];
+		$viewData["workflowDetail"] = array();
+
+		foreach ($details as $detail) {
+			$detail = $this->convertFromTaskStateToColor($detail);
+			$detail["WorkFlowDetail"]["comments"] = array();
+			foreach ($comments as $comment) {
+				$detail["WorkFlowDetail"]["comments"][] = $comment["WorkFlowDetailComment"];
+			}
+			$viewData["workflowDetails"][] = $detail["WorkFlowDetail"];
+		}
+
+		return $viewData;
+	}
+
+	private function convertFromTaskStateToColor($detail) {
+		$finish = '#c0ff23';
+		$current = '#ffc023';
+		$yet = '#cfcfcf';
+		if ($detail["WorkFlowDetail"]["task_state"] == self::TASK_STATE_FINISH) {
+			$detail["WorkFlowDetail"]["task_state"] = $finish;
+		} elseif ($detail["WorkFlowDetail"]["task_state"] == self::TASK_STATE_CURRENT) {
+			$detail["WorkFlowDetail"]["task_state"] = $current;
+		} else {
+			$detail["WorkFlowDetail"]["task_state"] = $yet;
+		}
+		return $detail;
 	}
 }

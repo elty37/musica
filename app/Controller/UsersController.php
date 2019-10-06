@@ -13,26 +13,6 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $components = array(
-		'Paginator',
-		'Flash',
-		'Auth' => array(
-            'loginRedirect' => array(
-                'controller' => 'users',
-                'action' => 'index'
-            ),
-            'logoutRedirect' => array(
-                'controller' => 'users',
-                'action' => 'login',
-                'home',
-            ),
-            'authenticate' => array(
-                'Form' => array(
-                    'passwordHasher' => 'Blowfish',
-					'fields' => array('username' => 'mail_address'),
-				),
-            )
-        ));
 	public $uses = array('User', 'Role');
 	public $paginate = array(
 		'User',
@@ -174,6 +154,10 @@ class UsersController extends AppController {
 			'User.user_name' => $user_name,
 			'User.role_id' => $role_id,
 		);
+
+		if (is_null($user_id) && is_null($user_name) && is_null($role_id)) {
+			$conditions = array();
+		}
 		$paginate =	array(
 			'page' => $page,
 			'fields' => array('id', 'user_name', 'role_id', 'created', 'modified',),

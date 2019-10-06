@@ -37,8 +37,26 @@ class AppController extends Controller {
   private $from_page = false;
 	public $components = array(
         'DebugKit.Toolbar',
+        'Paginator',
+        'Flash',
+        'Auth' => array(
+                'loginRedirect' => array(
+                    'controller' => 'users',
+                    'action' => 'index'
+                ),
+                'logoutRedirect' => array(
+                    'controller' => 'users',
+                    'action' => 'login',
+                    'home',
+                ),
+                'authenticate' => array(
+                    'Form' => array(
+                        'passwordHasher' => 'Blowfish',
+              'fields' => array('username' => 'mail_address'),
+            ),
+                )
+            )
     );
-        
     public function beforeFilter()
     {
       $page_token = Hash::get($this->request->query, "access_token", null);
@@ -64,9 +82,9 @@ class AppController extends Controller {
         }
     }
 
-    protected function setJsonResponce($result = array()) {
+    protected function setJsonResponce($result = array(), $name = 'result') {
       if ($this->from_page) {
-        $this->set('result', json_encode($result));
+        $this->set($name, json_encode($result));
       } else {
         $this->set(compact('result'));
       }

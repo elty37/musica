@@ -48,4 +48,12 @@ class WorkFlowDetail extends AppModel {
 		),
 	);
 
+	public function findByHeadId($headId) {
+		return $this->find('all',array(
+			'conditions' => array(
+				'work_flow_head_id' => $headId,
+			),
+		));
+	}
+
 }

@@ -4,6 +4,8 @@ App::uses('AppController', 'Controller');
  * WorkFlowDetails Controller
  *
  * @property WorkFlowDetail $WorkFlowDetail
+ * @property WorkFlowHead $WorkFlowHead
+ * @property WorkFlowDetailComment $WorkFlowDetailComment
  * @property PaginatorComponent $Paginator
  */
 class WorkFlowDetailsController extends AppController {
@@ -14,6 +16,7 @@ class WorkFlowDetailsController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
+	public $uses = array('WorkFlowDetails', 'WorkFlowHeads', 'WorkFlowDetailComments',);
 
 /**
  * index method
@@ -22,7 +25,7 @@ class WorkFlowDetailsController extends AppController {
  */
 	public function index() {
 		$this->WorkFlowDetail->recursive = 0;
-		$this->set('workFlowDetails', $this->Paginator->paginate());
+		$this->view();
 	}
 
 /**
@@ -36,8 +39,11 @@ class WorkFlowDetailsController extends AppController {
 		if (!$this->WorkFlowDetail->exists($id)) {
 			throw new NotFoundException(__('Invalid work flow detail'));
 		}
+		$comment_options = array('conditions' => array('WorkFlowDetailComments.work_flow_detail_id' => $id));
+		$comments = $this->WorkFlowDetailComment->find('all', $comment_options);
 		$options = array('conditions' => array('WorkFlowDetail.' . $this->WorkFlowDetail->primaryKey => $id));
-		$this->set('workFlowDetail', $this->WorkFlowDetail->find('first', $options));
+		$this->setJsonResponce($comments, 'comments');
+		$this->setJsonResponce($this->WorkFlowDetail->find('first', $options), 'workFlowDetail');
 	}
 
 /**
