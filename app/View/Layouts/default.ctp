@@ -48,8 +48,8 @@
       
       
     <div class="login_info header">
-        <p>舞風　彩さんがログインしています。</p>
-        <p>権限：管理者</p>
+        <p><?php echo $this->Session->read('Auth.User.user_name'); ?>さんがログインしています。</p>
+        <p>権限：<?php echo $this->Session->read('Auth.User.role_name'); ?></p>
     </div>
     <div class="container-fluid">
         <div class="row">
@@ -58,9 +58,9 @@
                   <a href="#" class="navbar-brand">Menu</a>
                     <div class="navbar-collapse" id="navmenu1">
                         <div class="navbar-nav">
-                          <a class="nav-item nav-link" href="#">ワークフロー</a>
-                          <a class="nav-item nav-link" href="#">メンバー</a>
-                          <a class="nav-item nav-link manager_menu" href="#">ロール</a>
+                          <a class="nav-item nav-link" href="/work_flow_heads/">ワークフロー</a>
+                          <a class="nav-item nav-link" href="/users/">メンバー</a>
+                          <a class="nav-item nav-link manager_menu" href="/roles/">ロール</a>
                         </div>
                     </div>
                 </nav>
