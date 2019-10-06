@@ -42,7 +42,7 @@
                                 <label for="#workflow_name">{{taskForm.labelCount}}番目のタスク名</label>
                             </div>
                             <div class="col-sm d-flex align-items-end">
-                                <input class="form-control taskName" type="text" id="workflow_name" v-model="taskNames[index]" v-on:change="changeTaskName" />
+                                <input :name="taskForm.labelCount" class="form-control taskName" type="text" id="workflow_name" v-model="taskNames[index]" v-on:change="changeTaskName" />
                             </div>
                         </div>
                         <div class="row form-group">
@@ -217,6 +217,7 @@
                     {labelCount: '3'},
                 ],
                 taskNames: ['','',''],
+                taslSendNames: ['','','','','',''],
                 workflowStates: [
                   {
                       taskId : "7",

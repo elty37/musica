@@ -28,10 +28,23 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',)
  * @return void
  */
 	public function index() {
-		$this->WorkFlowHead->recursive = 0;
-		$this->set('workFlowHeads', $this->Paginator->paginate());
+		if ($this->request->is('post')) {
+			if (is_null($id)) {
+				$this->add();
+				return;
+			}
+			$this->edit($id);
+			return;
+		} elseif ($this->request->is('delete')) {
+			$this->delete($id);
+			return;
+		} elseif ($this->request->is('get')) {
+			$this->search();
+			return;
+		}
+		$this->search();
 	}
-
+	
 /**
  * view method
  *
@@ -70,15 +83,29 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',)
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->WorkFlowHead->create();
-			if ($this->WorkFlowHead->save($this->request->data)) {
-				$this->Flash->success(__('The work flow head has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
+			$workFlowHead = $this->request->data["WorkFlowHead"];
+			$requestWorkFlowDetails = $this->request->data["WorkFlowDetail"];
+			$workFlowDetail = array();
+			$workFlowHead = $this->WorkFlowHead->save($this->request->data["WorkFlowHead"]);
+			if (!$workFlowHead) {
 				$this->Flash->error(__('The work flow head could not be saved. Please, try again.'));
 			}
+			foreach($requestWorkFlowDetails as $workFlowDetail) {
+				$workFlowDetail["work_flow_head_id"] = $workFlowHead["WorkFlowHead"]["id"];
+				App::uses('WorkFlowDetail', 'Model');
+				$workFlowDetail["task_state"] = WorkFlowDetail::WORK_FLOW_STATE_YET;
+				$workFlowDetails[] = $workFlowDetail;
+			}
+			if (!$this->WorkFlowDetail->saveAll($workFlowDetails)) {
+				$this->Flash->error(__('The work flow head could not be saved. Please, try again.'));
+			}
+
+			$this->Flash->success(__('The work flow head has been saved.'));
+			return $this->redirect(array('action' => 'index'));
+
 		}
-		$workFlowHeads = $this->WorkFlowHead->WorkFlowHead->find('list');
-		$workFlowFiles = $this->WorkFlowHead->WorkFlowFile->find('list');
+		$workFlowHeads = $this->WorkFlowHead->find('list');
+		$workFlowFiles = $this->WorkFlowHead->find('list');
 		$this->set(compact('workFlowHeads', 'workFlowFiles'));
 	}
 
@@ -128,7 +155,46 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',)
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+	/**
+	 * ワークフロー一覧取得Ajax
+	 * @param int $per_page 1ページのデータ数
+	 * @param int $page 何ページ目か
+ 	 */
+	  public function search() {
+		$page = Hash::get($this->request->query, "page", self::DEFALUT_PAGE);
+		$per_page = Hash::get($this->request->query, "per_page", self::DEFALUT_PER_PAGE);
+		$workFlowHeadId = Hash::get($this->request->query, "work_flow_head_id");
+		$workFlowName = Hash::get($this->request->query, "work_flow_name");
+		//$fileName = Hash::get($this->request->query, "file_id");
+		$conditions = array(
+			'WorkFlowHead.id' => $workFlowHeadId,
+			'WorkFlowHead.work_flow_name' => $workFlowName,
+		//	'work_flow_heads.file_name' => $fileName,
+		);
 
+		if (is_null($workFlowHeadId) && is_null($workFlowName)) {
+			$conditions = array();
+		}
+		$paginate =	array(
+			'page' => $page,
+			'fields' => array('id', 'work_flow_name', 'file_name', 'created', 'modified',),
+			'limit' => $per_page,
+			'conditions' => array(
+				'or' => $conditions,
+			),
+			'order' => array(
+				'WorkFlowHead.id' => 'asc',
+			)
+		);
+		$this->Paginator->settings = $paginate;
+		$workFlowHeads = $this->Paginator->paginate();
+		for ($i = 0; $i < count($workFlowHeads); $i++) {
+			$workFlowHeads[$i]["WorkFlowHead"]["url"] = '/work_flow_heads/view/' . $workFlowHeads[$i]["WorkFlowHead"]["id"];
+		} 
+		$this->setJsonResponce($workFlowHeads);
+		$this->render('index');
+
+	}
 	private function createViewData($head, $details, $comments){
 		$viewData = $head["WorkFlowHead"];
 		$viewData["workflowDetails"] = array();

@@ -17,39 +17,44 @@
             
             <div class="row">
                 <div class="col-sm-2 d-flex align-items-end">
-                    <button type="button" name="addWorkflow" class="btn btn-info">ワークフローの追加</button>
+                    <a href="/work_flow_heads/add" name="addWorkflow" class="btn btn-info">ワークフローの追加</a>
                 </div>
             </div>
-            <div class="row border-bottom" v-for="(downloadFileInfo, index) in downloadFileInfos">
-                <div class="col-sm-1 d-flex align-items-end" v-if="index > 0">{{index}}</div>
-                <div class="col-sm-1 d-flex align-items-end" v-else></div>
+            <div class="row border-bottom">
+                <div class="col-sm-1 d-flex align-items-end">
+                  ID
+                </div>
                 <div class="col-sm-3 d-flex align-items-end">
-                    <a href="#" class="btn btn-link p-0">
-                        {{downloadFileInfo.workFlowName}}
-                    </a>
+                  ワークフロー名
                 </div>
                 <div class="col-sm-2 d-flex align-items-end">
-                    <a href="#" class="btn btn-link p-0">
-                        {{downloadFileInfo.fileName}}
-                    </a>
+                  ファイル
                 </div>
-                <div class="col-sm-2 d-flex align-items-end" v-if="index > 0">
-                        {{downloadFileInfo.stage}}
+                <div class="col-sm-2 d-flex align-items-end">
+                  更新日
                 </div>
-                <div class="col-sm-2 d-flex align-items-end" v-else>
-                    <a href="#" class="btn btn-link p-0">
-                        {{downloadFileInfo.stage}}
-                    </a>
+                <div class="col-sm-2 d-flex align-items-end">
+                  作成日
                 </div>
-                <div class="col-sm-2 d-flex align-items-end" v-if="index > 0">
-                        {{downloadFileInfo.uploadDate}}
+                <div class="col-sm-2 d-flex align-items-end">操作</div>
+            </div>
+            <div class="row border-bottom" v-for="(downloadFileInfo, index) in downloadFileInfos">
+                <div class="col-sm-1 d-flex align-items-end">{{downloadFileInfo.WorkFlowHead.id}}</div>
+                <div class="col-sm-3 d-flex align-items-end">
+                  <a :href="downloadFileInfo.WorkFlowHead.url" class="btn btn-link p-0">
+                      {{downloadFileInfo.WorkFlowHead.work_flow_name}}
+                  </a>
                 </div>
-                <div class="col-sm-2 d-flex align-items-end" v-else>
-                    <a href="#" class="btn btn-link p-0">
-                        {{downloadFileInfo.uploadDate}}
-                    </a>
+                <div class="col-sm-2 d-flex align-items-end">
+                  {{downloadFileInfo.WorkFlowHead.file_name}}
                 </div>
-                <div class="col-sm-2 d-flex align-items-end" v-if="index > 0">
+                <div class="col-sm-2 d-flex align-items-end">
+                  {{downloadFileInfo.WorkFlowHead.modified}}
+                </div>
+                <div class="col-sm-2 d-flex align-items-end">
+                  {{downloadFileInfo.WorkFlowHead.created}}
+                </div>
+                <div class="col-sm-2 d-flex align-items-end">
 
 <!-- template for the modal component -->
 <script type="text/x-template" id="modal-template">
@@ -122,9 +127,6 @@
                     <button class="btn btn-outline-danger btn-sm mr-2" onclick="confirm('ファイルを削除します。よろしいですか？');">
                         <i class="far fa-trash-alt"></i>
                     </button>
-                </div>
-                <div class="col-sm-2" v-else>
-                    操作
                 </div>
             </div>                                                
         </div>
@@ -208,6 +210,9 @@
 
         </style>
         <script>
+            var add_url = "/work_flow_heads/add";
+            var res = {};
+
             Vue.component('modal', {
               template: '#modal-template'
             })
@@ -215,33 +220,18 @@
               el: '#id-list',
               data: {
                 parentMessage: 'Parent',
-                downloadFileInfos: [
-                  {
-                      id : "ID",
-                      uploadDate: '作成日',
-                      workFlowName: 'ワークフロー名',
-                      fileName: 'ファイル名',
-                      stage: 'ステージ'
-                  },
-                  {
-                      id : "1",
-                      uploadDate: '2019-08-12',
-                      workFlowName: '第一話',
-                      fileName: '1st.xlsx',
-                      stage: '公開済'
-                  },
-                  {
-                      id : "2",
-                      uploadDate: '2019-08-22',
-                      workFlowName: '第二話',
-                      fileName: '2nd.xlsx',
-                      stage: 'デザイン工程'
-                  }
-                ],
+                downloadFileInfos: <?= $result; ?>,
+                  // {
+                  //     id : "2",
+                  //     uploadDate: '2019-08-22',
+                  //     workFlowName: '第二話',
+                  //     fileName: '2nd.xlsx',
+                  //     stage: 'デザイン工程'
+                  // }
                   showModal: false,
                   currentTaskIsFinished: false,
+                  url:"/work_flow_heads/view/",
                   fileName : ""
-
               },
                 methods:{
                     showFileName : function(event) {

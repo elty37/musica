@@ -9,7 +9,9 @@ App::uses('AppModel', 'Model');
  * @property WorkFlowDetail $WorkFlowDetail
  */
 class WorkFlowDetail extends AppModel {
-
+	const WORK_FLOW_STATE_YET = '0'; //未着手
+	const WORK_FLOW_STATE_CURRENT = '1'; //現在作業中
+	const WORK_FLOW_STATE_FINISHED = '2'; // 作業完了
 /**
  * Validation rules
  *

@@ -21,8 +21,10 @@ class WorkFlowDetailCommentsController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->WorkFlowDetailComment->recursive = 0;
-		$this->set('workFlowDetailComments', $this->Paginator->paginate());
+		$this->WorkFlowDetailComment->recursive = -1;
+		$this->WorkFlowDetailComment->create();
+		$a = $this->request->data;
+		$this->WorkFlowDetailComment->save($this->request->data);
 	}
 
 /**

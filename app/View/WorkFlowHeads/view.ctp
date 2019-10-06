@@ -11,7 +11,6 @@
     <div class="contant-title">
         <h1 class="workflowName">ワークフローとタスク</h1>
     </div>
-  <form method="post" action="./FrontController.php" enctype="multipart/form-data">
       <div class="container-fluid">
         <div class="row">
             <div class="edit_area col-sm-8">
@@ -143,11 +142,18 @@
               }
             function sendComment(){
                 let textField = $('#id-comment'); 
+                let user_id = '<?php echo $this->Session->read('Auth.User.id'); ?>';
+                let role_id = '<?php echo $this->Session->read('Auth.User.role_id'); ?>';
+                let user_name = '<?php echo $this->Session->read('Auth.User.user_name'); ?>';
+                let role_name = '<?php echo $this->Session->read('Auth.User.role_name'); ?>';
                 $.ajax({
                     type: 'POST',
                     url: ' http://localhost/work_flow_detail_comments/',
                     data: {
-                        comment:textField.val()
+                        comment:textField.val(),
+                        work_flow_detail_id:$('#id-taskId').text(),
+                        user_id:user_id,
+                        role_id:role_id
                     },
                     dataType: 'json'
                 })
@@ -177,8 +183,8 @@
                             commentDiv.addClass('comments-' + $('#id-taskId').text());
                             contentDiv.text(textField.val());
                             dateDiv.text(getNowDate());
-                            nameDiv.text();
-                            roleDiv.text();
+                            nameDiv.text(user_name);
+                            roleDiv.text(role_name);
                             commentDiv.append(dateDiv);
                             commentDiv.append(nameDiv);
                             commentDiv.append(roleDiv);
@@ -270,5 +276,4 @@
         </script>
         </div>
       </div>
-</form>
 </div>
