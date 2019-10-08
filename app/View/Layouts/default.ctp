@@ -48,8 +48,21 @@
       
       
     <div class="login_info header">
-        <p><?php echo $this->Session->read('Auth.User.user_name'); ?>さんがログインしています。</p>
-        <p>権限：<?php echo $this->Session->read('Auth.User.role_name'); ?></p>
+        <div class="container-fluid">
+           <div class="row">
+                <div class="col-sm-2">
+                    <p><?php echo $this->Session->read('Auth.User.user_name'); ?>さんがログインしています。</p>
+                    <p>権限：<?php echo $this->Session->read('Auth.User.role_name'); ?></p>
+                </div>
+                <div class="col-sm-9">
+                </div>
+                <div class="col-sm-1">
+                  <a href="http://localhost/users/logout" class="btn btn-info float-right">
+                    <i class="fas fa-sign-out-alt"></i>
+                  </a>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="container-fluid">
         <div class="row">

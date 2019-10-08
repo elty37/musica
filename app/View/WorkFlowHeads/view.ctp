@@ -54,7 +54,7 @@
                     </div>
                     <div class="row border-bottom">
                         <div class="col-sm-2 task_label">
-                        <label>タスク名</label>
+                        <label>担当グループ</label>
                         </div>
                         <div class="col-sm-10 task_value" id="id-taskName">
                         </div>
@@ -211,7 +211,7 @@
                 displayWorkflowTaskInfo: function(workflowState) {
                     $('#id-task_info_table').css({display: 'inherit'});
                     $('#id-taskId').text(workflowState.id);
-                    $('#id-taskName').text(workflowState.task_name);
+                    $('#id-taskName').text(workflowState.role_name);
                     $('#id-state').text(workflowState.task_state);
                     $('#id-modified').text(workflowState.modified);
                     let commentsDiv = $("<div></div>");

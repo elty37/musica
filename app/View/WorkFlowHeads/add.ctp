@@ -7,7 +7,6 @@
     </nav>
 </div>
 <div class="mx-auto">
-  <form method="post" enctype="multipart/form-data">
     <div class="col-sm">
         <div id="id-title">
                 <h1>あたらしいワークフロー</h1>
@@ -16,6 +15,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="container-fluid" id="id-list" class="lulu_table">
+					<form method="post" enctype="multipart/form-data">
                         <div class="row form-group">
                             <div class="col-sm-4 d-flex align-items-end">
                                 <label for="#workflow_name">ワークフロー名</label>
@@ -26,7 +26,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-sm-4 d-flex align-items-end">
-                                <label for="#workflow_name">ワークフロー数</label>
+                                <label>ワークフロー数</label>
                             </div>
                             <div class="col-sm d-flex align-items-end">
                                 <select class="form-control" id="workflow_count" v-model="workflowCount" v-on:change="changeTaskForm">
@@ -38,18 +38,22 @@
                         </div>
                         <div class="row form-group" v-for="(taskForm,index) in taskForms"> 
                             <div class="col-sm-4 d-flex align-items-end">
-                                <label for="#workflow_name">{{taskForm.labelCount}}番目のタスク名</label>
+                                <label>{{taskForm.labelCount}}番目のタスク名</label>
                             </div>
-                            <div class="col-sm d-flex align-items-end">
-                                <input :name="taskForm.inputLabelName" class="form-control taskName" type="text" id="workflow_name" v-model="taskNames[index]" v-on:change="changeTaskName" />
+                            <div class="col-sm d-flex align-items-end">					
+								<select :name="taskForm.inputRoleId" class="form-control taskName" v-model="taskNames[index]" v-on:change="changeTaskName"/>
+									<option v-for="role in roleList" :value="role.Role.id">{{role.Role.role_name}}</option>
+								</select>
+								<input type="hidden" :name="taskForm.inputRoleName" class="roleName" value="" />
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-sm d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary btn-lg">追加</button>
                             </div>
-                        </div>
-                    </div>
+						</div>
+					</form>
+					</div>
                 </div>
                 <div class="col-sm">
                     <div class="contant-title">
@@ -211,10 +215,11 @@
                       { text: '5', value: '5', selected: ''}
                     ],
                 taskForms: [
-                    {labelCount: '1', inputLabelName: "data[WorkFlowDetail][0][task_name]"},
-                    {labelCount: '2', inputLabelName: "data[WorkFlowDetail][1][task_name]"},
-                    {labelCount: '3', inputLabelName: "data[WorkFlowDetail][2][task_name]"},
-                ],
+                    {labelCount: '1', inputRoleId: "data[WorkFlowDetail][0][role_id]", inputRoleName: "data[WorkFlowDetail][0][role_name]"},
+                    {labelCount: '2', inputRoleId: "data[WorkFlowDetail][1][role_id]", inputRoleName: "data[WorkFlowDetail][1][role_name]"},
+                    {labelCount: '3', inputRoleId: "data[WorkFlowDetail][2][role_id]", inputRoleName: "data[WorkFlowDetail][2][role_name]"},
+				],
+				roleList: <?= $roleList ?>,
                 taskNames: ['','',''],
                 workflowStates: [
                   {
@@ -248,16 +253,10 @@
               },
                methods:{
                     changeTaskName : function(event) {
-                        var taskNames = this.taskNames;
-                        var workflowStates = this.workflowStates;
-                        var currentTaskIndex = this.currentTaskIndex;
-                        var currentTaskName = this.currentTaskName;
-                        $('.taskName').each( function(index, elem) {
-                            taskNames[index] = $(elem).val();
-                            workflowStates[index].taskName = $(elem).val();
-                            
-                            if (currentTaskIndex == index) {
-                                $('#id-taskName').text($(elem).val());
+                        $('.taskName').each( function(index, elem) {                            
+                            if ($(elem).attr('name') == $(this).attr('name')) {
+                                $('#id-taskName').text($(elem).children('option:selected').text());
+                                $('.roleName:eq(' + index + ')').val($(elem).children('option:selected').text());
                             }
                         });
                     },
@@ -278,7 +277,7 @@
                         for (var i = 1; i <= selectedValue ; i++) {
                              newTask.taskId = this.taskIds[i-1];
                              this.currentTaskName = this.taskNames[i-1];
-                             this.taskForms[i-1] = {labelCount: i, inputLabelName: "data[WorkFlowDetail][" + (i-1) +"][task_name]"};
+                             this.taskForms[i-1] = {labelCount: i, inputRoleId: "data[WorkFlowDetail][" + (i-1) +"][role_id]", inputRoleName: "data[WorkFlowDetail][" + (i-1) +"][role_name]"};
                              this.workflowStates[i-1] =  JSON.parse(JSON.stringify(newTask));
                         }
                     },
@@ -292,9 +291,9 @@
                     displayWorkflowTaskInfo: function(workflowState, index) {
                         $('#id-task_info_table').css({display: 'inherit'});
                         $('#id-taskId').text(workflowState.taskId);
-                        $('#id-taskName').text(workflowState.taskName);
-                        $('#id-state').text(workflowState.state);
-                        $('#id-modified').text(workflowState.modified);
+                        $('#id-taskName').text($('.taskName:eq(' + index + ')').children("option:selected").text());
+                        $('#id-state').text("未着手");
+                        $('#id-modified').text("20XX年〇月×日");
                         let commentsDiv = $("<div></div>");
                         let commentDiv = $("<div></div>");
                         let commentInput = $('<input />');
@@ -312,7 +311,8 @@
                         let mmi = ('0' + mi).slice(-2);
                         let ss = ('0' + s).slice(-2);
                         $('#id-comments').empty();
-                        this.currentTaskIndex = index;
+						this.currentTaskIndex = index;
+						
                         for (let i = 0; i < workflowState.comment.length + 1;i++) {
                             dateDiv = $("<div></div>");
                             dateDiv.addClass('col-sm-3');
@@ -357,5 +357,4 @@
             })
         </script>
     </div>
-</form>
 </div>

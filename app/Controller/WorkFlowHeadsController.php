@@ -20,7 +20,7 @@ class WorkFlowHeadsController extends AppController {
  */
 public $components = array('Paginator');
 public $helpers = array('Session');
-public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',);
+public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','Role');
 
 /**
  * index method
@@ -106,6 +106,11 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',)
 		}
 		$workFlowHeads = $this->WorkFlowHead->find('list');
 		$workFlowFiles = $this->WorkFlowHead->find('list');
+		$roleList = $this->Role->find('all', array(
+			'fields' => array('id', 'role_name',),
+		));
+		$this->setJsonResponce($roleList, 'roleList');
+
 		$this->set(compact('workFlowHeads', 'workFlowFiles'));
 	}
 
@@ -147,7 +152,7 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',)
 		if (!$this->WorkFlowHead->exists($id)) {
 			throw new NotFoundException(__('Invalid work flow head'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->allowMethod('post', 'delete', 'get');
 		if ($this->WorkFlowHead->delete($id)) {
 			$this->Flash->success(__('The work flow head has been deleted.'));
 		} else {
@@ -188,10 +193,19 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment',)
 		);
 		$this->Paginator->settings = $paginate;
 		$workFlowHeads = $this->Paginator->paginate();
+		$workFlowHeadids = array();
 		for ($i = 0; $i < count($workFlowHeads); $i++) {
+			$workFlowHeadids[] = $workFlowHeads[$i]["WorkFlowHead"]["id"];
 			$workFlowHeads[$i]["WorkFlowHead"]["url"] = '/work_flow_heads/view/' . $workFlowHeads[$i]["WorkFlowHead"]["id"];
-		} 
+		}
+		
 		$this->setJsonResponce($workFlowHeads);
+		//ファイルアップロード
+		$this->set('stateList', array(
+			'0' => '未着手',
+			'1' => '作業中',
+			'2' => '作業完了',
+		));
 		$this->render('index');
 
 	}

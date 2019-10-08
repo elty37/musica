@@ -16,9 +16,11 @@
         <div class="container-fluid" id="id-list" class="lulu_table">
             
             <div class="row">
+                <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
                 <div class="col-sm-2 d-flex align-items-end">
                     <a href="/work_flow_heads/add" name="addWorkflow" class="btn btn-info">ワークフローの追加</a>
                 </div>
+                <?php endif ?>
             </div>
             <div class="row border-bottom">
                 <div class="col-sm-1 d-flex align-items-end">
@@ -95,6 +97,7 @@
     </button>
   <!-- use the modal component, pass in the prop -->
   <modal v-if="showModal" @close="showModal = false">
+    <?= $this->Form->create('Image', array('action' => 'upload', 'type' => 'file')); ?>
     <h3 slot="header">Excelファイルのアップロード</h3>
     <div slot="body">
     <div class="form-group form-inline">
@@ -109,24 +112,25 @@
         </div>
     </div>
   <div class="form-group form-check">
-      
-    <input style="display:none" type="checkbox" class="form-check-input" id="workflowCheck" v-model="currentTaskIsFinished">
-    <label class="label_checkbox_not_checked" for="workflowCheck" v-if="currentTaskIsFinished">
-      ☐
-    </label>
-    <label class="label_checkbox_checked" for="workflowCheck" v-else>
-      ☑
-    </label>
+  <?= $this->Form->input('prefecture', array( 
+    'type' => 'select', 
+    'options' => array($stateList),
+    'selected' => $selected,
+    'div' => false,           // div親要素の有無(true/false)
+    'empty' => false          
+)); ?>
     <label class="form-check-label" for="workflowCheck">作業を完了する</label>
   </div>
     </div>
+    <?= $this->Form->end() ?>
   </modal>
 </div>
                     
-
-                    <button class="btn btn-outline-danger btn-sm mr-2" onclick="confirm('ファイルを削除します。よろしいですか？');">
+                  <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
+                    <a :href="deleteUrl + downloadFileInfo.WorkFlowHead.id" class="btn btn-outline-danger btn-sm mr-2" onclick="return confirm('ワークフローを削除します。よろしいですか？');">
                         <i class="far fa-trash-alt"></i>
-                    </button>
+                    </a>
+                    <?php endif ?>
                 </div>
             </div>                                                
         </div>
@@ -221,13 +225,7 @@
               data: {
                 parentMessage: 'Parent',
                 downloadFileInfos: <?= $result; ?>,
-                  // {
-                  //     id : "2",
-                  //     uploadDate: '2019-08-22',
-                  //     workFlowName: '第二話',
-                  //     fileName: '2nd.xlsx',
-                  //     stage: 'デザイン工程'
-                  // }
+                deleteUrl: "/work_flow_heads/delete/",
                   showModal: false,
                   currentTaskIsFinished: false,
                   url:"/work_flow_heads/view/",

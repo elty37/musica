@@ -16,9 +16,11 @@
         <div class="container-fluid" id="id-list" class="lulu_table">
             
           <div class="row">
+          <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
               <div class="col-sm-2 d-flex align-items-end">
                   <a class="btn btn-info" href="/users/add">メンバーの追加</a>
               </div>
+          <?php endif ?>
           </div>
           <div class="row border-bottom">
             <div class="col-sm-1 d-flex align-items-end">ID</div>
@@ -96,9 +98,6 @@
 
             <!-- app -->
             <div id="app">
-                <button type="button" id="show-modal" @click="showModal = true" class="btn btn-outline-primary btn-sm mr-2">
-                    <i class="fas fa-file-upload"></i>
-                </button>
               <!-- use the modal component, pass in the prop -->
               <modal v-if="showModal" @close="showModal = false">
                 <h3 slot="header">Excelファイルのアップロード</h3>
@@ -129,10 +128,11 @@
               </modal>
             </div>
             
-
-            <button class="btn btn-outline-danger btn-sm mr-2" onclick="confirm('ファイルを削除します。よろしいですか？');">
+            <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
+            <a :href="deleteUrl + result.User.id" class="btn btn-outline-danger btn-sm mr-2" onclick="return confirm('ファイルを削除します。よろしいですか？');">
                 <i class="far fa-trash-alt"></i>
-            </button>
+            </a>
+            <?php endif ?>
         </div>
         <div class="col-sm-2">
         </div>
@@ -220,7 +220,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
         <script>
-          var add_url = "/users/edit/";
+          var add_url = "/users/add/";
           var res = {};
           var mixin = {
 
@@ -229,8 +229,8 @@
                     el: '#id-list',
                     data: {
                       parentMessage: 'Parent',
-                      results: <?= $result; ?>
-
+                      results: <?= $result; ?>,
+                      deleteUrl: '/users/delete/'
                     },
                     ajax:{
                       data:{

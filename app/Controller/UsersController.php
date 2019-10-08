@@ -129,7 +129,7 @@ class UsersController extends AppController {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->allowMethod('post', 'delete', 'get');
 		if ($this->User->delete($id)) {
 			$this->Flash->success(__('The user has been deleted.'));
 		} else {
@@ -178,6 +178,7 @@ class UsersController extends AppController {
 	 * ログイン(フォーム認証）
 	 */
 	public function login() {
+		$this->layout = "";
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
 				$this->Auth->setToken();
@@ -194,6 +195,7 @@ class UsersController extends AppController {
 					)
 				);
 				$this->Session->write('Auth.User.role_name', $login_users_role["Role"]["role_name"]);
+				$this->Session->write('Auth.User.admin_flag', $login_users_role["Role"]["admin_flag"]);
 				$this->redirect($this->Auth->redirect());
 			} else {
 				$this->Flash->error(__('Invalid username or password, try again'));

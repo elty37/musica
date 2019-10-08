@@ -48,13 +48,12 @@ class AppController extends Controller {
                 'logoutRedirect' => array(
                     'controller' => 'users',
                     'action' => 'login',
-                    'home',
                 ),
                 'authenticate' => array(
                     'Form' => array(
                         'passwordHasher' => 'Blowfish',
-              'fields' => array('username' => 'mail_address'),
-            ),
+                        'fields' => array('username' => 'mail_address'),
+                    ),
                 )
             )
     );
