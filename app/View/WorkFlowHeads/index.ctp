@@ -97,7 +97,7 @@
 </div>
                     
                   <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
-                    <a :href="deleteUrl + index" class="btn btn-outline-danger btn-sm mr-2" onclick="return confirm('ワークフローを削除します。よろしいですか？');">
+                    <a :href="deleteUrl + downloadFileInfo.WorkFlowHead.id" class="btn btn-outline-danger btn-sm mr-2" onclick="return confirm('ワークフローを削除します。よろしいですか？');">
                         <i class="far fa-trash-alt"></i>
                     </a>
                     <?php endif ?>

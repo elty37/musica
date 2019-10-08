@@ -115,7 +115,6 @@ body {
   
   <h2 class="login-header">Log in</h2>
 
-  <?php echo $this->Flash->render('auth'); ?>
   <?php echo $this->Form->create('User'); ?>
   <?php
     echo $this->Form->input('mail_address',array(

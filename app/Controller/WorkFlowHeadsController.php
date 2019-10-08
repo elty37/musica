@@ -150,7 +150,8 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
  */
 	public function delete($id = null) {
 		if (!$this->WorkFlowHead->exists($id)) {
-			throw new NotFoundException(__('Invalid work flow head'));
+			$this->Flash->error("そのIDは存在しません。");
+			return $this->redirect(array('action' => 'index'));
 		}
 		$this->request->allowMethod('post', 'delete', 'get');
 		if ($this->WorkFlowHead->delete($id)) {
