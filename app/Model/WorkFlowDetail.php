@@ -58,4 +58,12 @@ class WorkFlowDetail extends AppModel {
 		));
 	}
 
+	public function findByHeadIdAndRoleId($headId, $roleId) {
+		return $this->find('all',array(
+			'conditions' => array(
+				'work_flow_head_id' => $headId,
+				'role_id' => $roleId,
+			),
+		));
+	}
 }

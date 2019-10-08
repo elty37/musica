@@ -7,8 +7,6 @@
     </nav>
 </div>
 <div class="mx-auto">
-  <form method="post" action="./FrontController.php" enctype="multipart/form-data">
-
     <div class="col-sm">
         <div id="id-title">
                 <h1>ワークフローとファイル</h1>
@@ -57,8 +55,56 @@
                   {{downloadFileInfo.WorkFlowHead.created}}
                 </div>
                 <div class="col-sm-2 d-flex align-items-end">
+                
 
-<!-- template for the modal component -->
+
+
+<!-- app -->
+<div id="app">
+    <button type="button" @click="openModal(downloadFileInfo.WorkFlowHead.id)" class="btn btn-outline-primary btn-sm mr-2">
+        <i class="fas fa-file-upload"></i>
+    </button>
+  <!-- use the modal component, pass in the prop -->
+  <form :action="uploadUrl" enctype="multipart/form-data" method="post" accept-charset="utf-8" @submit="sendModal()">
+  <modal v-if="showModal" @close="showModal = false" :id="downloadFileInfo.WorkFlowHead.id">
+   <h3 slot="header">Excelファイルのアップロード</h3>
+    <div slot="body">
+    <div class="form-group form-inline">
+        <label>
+            <span class="btn btn-primary">
+                ファイルを選択
+                <input type="file" name="workFile" accept=".xlsx" style="display:none" v-on:change="showFileName">
+            </span>
+        </label>
+        <div id="id-filename" style="margin-left:10px;">
+            {{fileName}}
+        </div>
+    </div>
+  <div class="form-group form-check">
+  <?= $this->Form->input('task_state', array( 
+    'class' => 'form-control',
+    'type' => 'select', 
+    'options' => array($stateList),
+    'label' => "タスクを更新する（あなたのロール：" . $this->Session->read('Auth.User.role_name') . "）",
+    'div' => false,           // div親要素の有無(true/false)
+    'empty' => false,          
+)); ?>
+    <input type="hidden" :id="headIdText + index" name="id" value="" />
+  </div>
+    </div>
+  </modal>
+  </form>   
+</div>
+                    
+                  <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
+                    <a :href="deleteUrl + index" class="btn btn-outline-danger btn-sm mr-2" onclick="return confirm('ワークフローを削除します。よろしいですか？');">
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                    <?php endif ?>
+                </div>
+            </div>                                                
+        </div>
+        <!-- template for the modal component -->
 <script type="text/x-template" id="modal-template">
   <transition name="modal">
     <div class="modal-mask">
@@ -81,7 +127,7 @@
 
           <div class="modal-footer">
           <slot name="submit-button">
-                　<button type="button" class="modal-default-button btn btn-outline-info" @click="$emit('close')">アップロード</button>
+                　<button type="submit" class="modal-default-button btn btn-outline-info">アップロード</button>
           </slot>
           </div>
         </div>
@@ -90,50 +136,6 @@
   </transition>
 </script>
 
-<!-- app -->
-<div id="app">
-    <button type="button" id="show-modal" @click="showModal = true" class="btn btn-outline-primary btn-sm mr-2">
-        <i class="fas fa-file-upload"></i>
-    </button>
-  <!-- use the modal component, pass in the prop -->
-  <modal v-if="showModal" @close="showModal = false">
-    <?= $this->Form->create('Image', array('action' => 'upload', 'type' => 'file')); ?>
-    <h3 slot="header">Excelファイルのアップロード</h3>
-    <div slot="body">
-    <div class="form-group form-inline">
-        <label>
-            <span class="btn btn-primary">
-                ファイルを選択
-                <input type="file" name="csvfile" accept=".xlsx" style="display:none" v-on:change="showFileName">
-            </span>
-        </label>
-        <div id="id-filename" style="margin-left:10px;">
-            {{fileName}}
-        </div>
-    </div>
-  <div class="form-group form-check">
-  <?= $this->Form->input('prefecture', array( 
-    'type' => 'select', 
-    'options' => array($stateList),
-    'selected' => $selected,
-    'div' => false,           // div親要素の有無(true/false)
-    'empty' => false          
-)); ?>
-    <label class="form-check-label" for="workflowCheck">作業を完了する</label>
-  </div>
-    </div>
-    <?= $this->Form->end() ?>
-  </modal>
-</div>
-                    
-                  <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
-                    <a :href="deleteUrl + downloadFileInfo.WorkFlowHead.id" class="btn btn-outline-danger btn-sm mr-2" onclick="return confirm('ワークフローを削除します。よろしいですか？');">
-                        <i class="far fa-trash-alt"></i>
-                    </a>
-                    <?php endif ?>
-                </div>
-            </div>                                                
-        </div>
         <style>
 .modal-mask {
   position: fixed;
@@ -226,10 +228,13 @@
                 parentMessage: 'Parent',
                 downloadFileInfos: <?= $result; ?>,
                 deleteUrl: "/work_flow_heads/delete/",
-                  showModal: false,
-                  currentTaskIsFinished: false,
-                  url:"/work_flow_heads/view/",
-                  fileName : ""
+                uploadUrl: "/work_flow_heads/upload/",
+                showModal: false,
+                currentTaskIsFinished: false,
+                url:"/work_flow_heads/view/",
+                fileName : "",
+                headIdText : "headIdText",
+                sendId:""
               },
                 methods:{
                     showFileName : function(event) {
@@ -237,10 +242,18 @@
                         var numFiles = input.get(0).files ? input.get(0).files.length : 1,
                         label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
                         this.fileName = label;
+                    },
+                    openModal : function(id) {
+                      this.showModal = true;
+                      var count = this.downloadFileInfos.length - 1;
+                      this.sendId = id;
+                    },
+                    sendModal : function() {
+                      var count = this.downloadFileInfos.length - 1;
+                      $('#' + this.headIdText + count).val(this.sendId);
                     }
                 }
             })
         </script>
     </div>
-</form>
 </div>

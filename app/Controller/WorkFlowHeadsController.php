@@ -20,14 +20,14 @@ class WorkFlowHeadsController extends AppController {
  */
 public $components = array('Paginator');
 public $helpers = array('Session');
-public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','Role');
+public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','Role', 'WorkFlowFile');
 
 /**
  * index method
  *
  * @return void
  */
-	public function index() {
+	public function index($id = null) {
 		if ($this->request->is('post')) {
 			if (is_null($id)) {
 				$this->add();
@@ -209,6 +209,50 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
 		$this->render('index');
 
 	}
+
+	/**
+	 * excelアップロード
+	 */
+	public function upload() {
+		$id = Hash::get($this->request->data, "id");
+		$roleId = $this->Session->read('Auth.User.role_id');
+		if (!$this->WorkFlowHead->exists($id)) {
+			throw new NotFoundException(__('Invalid work flow head'));
+		}
+		if ($this->request->is(array('post', 'put'))) {
+			$taskState = Hash::get($this->request->data, "task_state");
+			$fileName = Hash::get($this->request->params["form"]["workFile"], "name");
+			move_uploaded_file($this->request->params['form']['workFile']['tmp_name'], "../webroot/files/". $fileName);
+			$targetWorkFlowDetails = $this->WorkFlowDetail->findByHeadIdAndRoleId($id, $roleId);
+			foreach($targetWorkFlowDetails as $index => $targetWorkFlowDetail) {
+				if (!is_null($taskState)) {
+					$targetWorkFlowDetails[$index]["WorkFlowDetail"]["task_state"] = $taskState;
+				}
+			}
+			if (!$this->WorkFlowDetail->saveAll($targetWorkFlowDetails)) {
+				$this->Flash->error(__('The work flow detail could not be saved. Please, try again.'));
+				return $this->redirect(array('action' => 'index'));
+			}
+			$workFlowFile = $this->WorkFlowFile->save(array('work_flow_file_name' => $fileName));
+			if (!$workFlowFile) {
+				$this->Flash->error(__('The work flow file could not be saved. Please, try again.'));
+				return $this->redirect(array('action' => 'index'));
+			}
+			if ($this->WorkFlowHead->save(array('id' => $id, 'file_name' => $fileName, 'work_flow_file_id' => $workFlowFile["WorkFlowFile"]["id"]))) {
+				$this->Flash->success(__('The work flow head has been saved.'));
+			} else {
+				$this->Flash->error(__('The work flow head could not be saved. Please, try again.'));
+			}
+		}
+		return $this->redirect(array('action' => 'index'));
+	}
+	/**
+	 * viewの表示情報生成
+	 * @param array $head
+	 * @param array $details
+	 * @param array $comments
+	 * @return array 
+	 */
 	private function createViewData($head, $details, $comments){
 		$viewData = $head["WorkFlowHead"];
 		$viewData["workflowDetails"] = array();
@@ -229,6 +273,11 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
 		return $viewData;
 	}
 
+	/**
+	 * タスクの色を設定
+	 * @param array $detail
+	 * @return array
+	 */
 	private function convertFromTaskStateToColor($detail) {
 		$finish_color = '#c0ff23';
 		$current_color = '#ffc023';
