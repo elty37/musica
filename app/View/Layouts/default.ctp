@@ -73,7 +73,9 @@
                         <div class="navbar-nav">
                           <a class="nav-item nav-link" href="/work_flow_heads/">ワークフロー</a>
                           <a class="nav-item nav-link" href="/users/">メンバー</a>
+                          <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
                           <a class="nav-item nav-link manager_menu" href="/roles/">ロール</a>
+                          <?php endif ?>
                         </div>
                     </div>
                 </nav>
