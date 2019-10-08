@@ -23,7 +23,6 @@ class WorkFlowDetailCommentsController extends AppController {
 	public function index() {
 		$this->WorkFlowDetailComment->recursive = -1;
 		$this->WorkFlowDetailComment->create();
-		$a = $this->request->data;
 		$this->WorkFlowDetailComment->save($this->request->data);
 	}
 

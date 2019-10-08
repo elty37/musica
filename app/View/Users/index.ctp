@@ -28,7 +28,7 @@
                   ユーザ名
             </div>
             <div class="col-sm-2 d-flex align-items-end">
-                  グループ
+                  ロール
             </div>
             <div class="col-sm-2 d-flex align-items-end">
                   作成日
@@ -43,24 +43,20 @@
           <div class="row border-bottom" v-for="(result, index) in results">
             <div class="col-sm-1 d-flex align-items-end">{{result.User.id}}</div>
             <div class="col-sm-3 d-flex align-items-end">
-                <a v-bind:href=result.url class="btn btn-link p-0">
+                <a v-bind:href="userEditUrl + result.User.id" class="btn btn-link p-0">
                     {{result.User.user_name}}
                 </a>
             </div>
             <div class="col-sm-2 d-flex align-items-end">
-                <a href="#" class="btn btn-link p-0">
-                    {{result.User.role_id}}
+                <a :href="roleEditUrl + result.User.role_id" class="btn btn-link p-0">
+                    {{result.Role.role_name}}
                 </a>
             </div>
             <div class="col-sm-2 d-flex align-items-end">
-                <a href="#" class="btn btn-link p-0">
                     {{result.User.created}}
-                </a>
             </div>
             <div class="col-sm-2 d-flex align-items-end">
-                <a href="#" class="btn btn-link p-0">
                     {{result.User.modified}}
-                </a>
             </div>
             <div class="col-sm-2 d-flex align-items-end">
 
@@ -230,7 +226,9 @@
                     data: {
                       parentMessage: 'Parent',
                       results: <?= $result; ?>,
-                      deleteUrl: '/users/delete/'
+                      userEditUrl: '/users/edit/',
+                      deleteUrl: '/users/delete/',
+                      roleEditUrl: '/roles/edit/'
                     },
                     ajax:{
                       data:{

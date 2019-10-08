@@ -8,6 +8,7 @@ App::uses('AppController', 'Controller');
  */
 class UsersController extends AppController {
 
+	const ADMIN_ID = 1;
 /**
  * Components
  *
@@ -63,7 +64,8 @@ class UsersController extends AppController {
  */
 	public function view($id = null) {
 		if (!$this->User->exists($id)) {
-			throw new NotFoundException(__('Invalid user'));
+			$this->Flash->error("そのIDは存在しません。");
+			return $this->redirect(array('action' => 'index'));
 		}
 		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 		$this->set('user', $this->User->find('first', $options));
@@ -98,7 +100,8 @@ class UsersController extends AppController {
  */
 	public function edit($id = null) { 
 		if (!$this->User->exists($id)) {
-			throw new NotFoundException(__('Invalid user'));
+			$this->Flash->error("そのIDは存在しません。");
+			return $this->redirect(array('action' => 'index'));
 		}
 		$password = Hash::get($this->request->query, "password", self::DEFALUT_PAGE);
 		$input_user = $this->request->data;
@@ -127,7 +130,12 @@ class UsersController extends AppController {
  */
 	public function delete($id = null) {
 		if (!$this->User->exists($id)) {
-			throw new NotFoundException(__('Invalid user'));
+			$this->Flash->error("そのIDは存在しません。");
+			return $this->redirect(array('action' => 'index'));
+		}
+		if ($id == self::ADMIN_ID) {
+			$this->Flash->error("そのIDは削除できません。");
+			return $this->redirect(array('action' => 'index'));
 		}
 		$this->request->allowMethod('post', 'delete', 'get');
 		if ($this->User->delete($id)) {
@@ -140,8 +148,6 @@ class UsersController extends AppController {
 
 	/**
 	 * User一覧取得Ajax
-	 * @param int $per_page 1ページのデータ数
-	 * @param int $page 何ページ目か
  	 */
 	public function search() {
 		$page = Hash::get($this->request->query, "page", self::DEFALUT_PAGE);
@@ -160,14 +166,24 @@ class UsersController extends AppController {
 		}
 		$paginate =	array(
 			'page' => $page,
-			'fields' => array('id', 'user_name', 'role_id', 'created', 'modified',),
+			'fields' => array('User.id', 'User.user_name', 'User.role_id', 'User.created', 'User.modified', 'Role.role_name'),
 			'limit' => $per_page,
 			'conditions' => array(
 				'or' => $conditions,
 			),
 			'order' => array(
 				'User.id' => 'asc',
-			)
+			),
+			'joins' => array(
+				array(
+					'table' => 'roles',
+					'alias' => 'Role',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Role.id = User.role_id',
+					),
+				),
+			),
 		);
 		$this->Paginator->settings = $paginate;
 		$this->setJsonResponce($this->Paginator->paginate());

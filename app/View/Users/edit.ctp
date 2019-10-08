@@ -67,6 +67,7 @@
 							"class" => "form-control col-sm-8",
 							"id" => "id-password",
 							"type" => "password",
+							"value" => "",
 						));
 						echo $this->Form->input('role_id',
 							array(
