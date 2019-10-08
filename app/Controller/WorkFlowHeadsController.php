@@ -54,7 +54,8 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
  */
 	public function view($id = null) {
 		if (!$this->WorkFlowHead->exists($id)) {
-			throw new NotFoundException(__('Invalid work flow head'));
+			$this->Flash->error("そのIDは存在しません。");
+			return $this->redirect(array('action' => 'index'));
 		}
 		// head取得
 		$options = array('conditions' => array('WorkFlowHead.' . $this->WorkFlowHead->primaryKey => $id));
@@ -123,7 +124,8 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
  */
 	public function edit($id = null) {
 		if (!$this->WorkFlowHead->exists($id)) {
-			throw new NotFoundException(__('Invalid work flow head'));
+			$this->Flash->error("そのIDは存在しません。");
+			return $this->redirect(array('action' => 'index'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->WorkFlowHead->save($this->request->data)) {
