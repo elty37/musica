@@ -16,7 +16,7 @@ class WorkFlowDetailsController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
-	public $uses = array('WorkFlowDetails', 'WorkFlowHeads', 'WorkFlowDetailComments',);
+	public $uses = array('WorkFlowDetail', 'WorkFlowHead', 'WorkFlowDetailComment',);
 
 /**
  * index method
@@ -79,9 +79,10 @@ class WorkFlowDetailsController extends AppController {
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->WorkFlowDetail->save($this->request->data)) {
 				$this->Flash->success(__('The work flow detail has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller' => 'WorkFlowHeads', 'action' => 'view', $this->request->data["headId"]));
 			} else {
 				$this->Flash->error(__('The work flow detail could not be saved. Please, try again.'));
+				return $this->redirect(array('controller' => 'WorkFlowHeads', 'action' => 'view', $this->request->data["headId"]));
 			}
 		} else {
 			$options = array('conditions' => array('WorkFlowDetail.' . $this->WorkFlowDetail->primaryKey => $id));

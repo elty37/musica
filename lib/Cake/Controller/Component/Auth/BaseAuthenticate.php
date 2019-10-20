@@ -49,7 +49,7 @@ abstract class BaseAuthenticate implements CakeEventListener {
 		'scope' => array(),
 		'recursive' => 0,
 		'contain' => null,
-		'passwordHasher' => 'Simple'
+		'passwordHasher' => 'Blowfish'
 	);
 
 /**

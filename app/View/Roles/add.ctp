@@ -11,9 +11,13 @@
         <div id="id-title">
                 <h1>あたらしいロール</h1>
         </div>
-        <div class="container-fluid" id="id-list" class="lulu_table">
+        <div class="container-fluid" id="id-all-list" class="lulu_table">
 			<div class="row">
 				<div class="roles form col-sm-4">
+				<div class="contant-title">
+					<h2>ロール</h2>
+				</div>
+
 				<?php echo $this->Form->create('Role'); ?>
 					<?php
 						echo $this->Form->input('role_name', array(
@@ -44,19 +48,66 @@
 						));
 
 					?>
-				<?php echo $this->Form->input('ロールの追加', array(
-					"label" => false,
-					"type" => "submit",
-					"class" => "btn btn-primary btn-lg",
-				)); ?>
-				<?php echo $this->Form->end(); 
-				?>
+					<?php echo $this->Form->input('ロールの追加', array(
+						"label" => false,
+						"type" => "submit",
+						"class" => "btn btn-primary btn-lg",
+					)); ?>
+					<?php echo $this->Form->end(); 
+					?>
 				</div>
-				<div class="col-sm-8"></div>
+				<div class="col-sm-8">
+					<div class="container-fluid" id="id_user-list" class="lulu_table">
+						<div class="contant-title">
+							<h2>ユーザ</h2>
+						</div>
+						<div class="container preview">
+							ほげ
+						</div>
+					</div>
+				</div>
+				<style>
+					.preview {
+						border: double 3px #6594e0;
+						border-radius: 15px;
+					}
+				</style>
+				<script>
+var list = new Vue({
+              el: '#id-list',
+              data: {
+                workflowName: '',
+                workflowStates: [
+                  {
+                      taskId : "7",
+                      modified: y + '-' + mm + '-' + dd + ' ' + hh + ':' + mmi + ':' + ss,
+                      taskName: '',
+                      state: '未着手',
+                      stateColor: '#cfcfcf',
+                      stateColorMouceOver: '#b0b0b0',
+                      comment: []
+                  }
+                ]
+              },
+               methods:{
+                    changeTaskName : function(event) {
+                    },
+                    changeTaskForm : function(event) {
+                    },
+                    
+                   focus: function(workflowState) {
+                    $('#task-' + workflowState.taskId).css({'fill': workflowState.stateColorMouceOver});
+                    },
+                    releaseFocus: function(workflowState) {
+                        $('#task-' + workflowState.taskId).css({'fill': workflowState.stateColor});
+                    },
+                    displayWorkflowTaskInfo: function(workflowState, index) {
+                    }
+                }
+            })
+				</script>
 			</div>
-		
-    </div>
+		</div>	
+	</div>
 </div>
-
-
 

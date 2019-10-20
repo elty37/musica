@@ -71,7 +71,6 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
 		$workFlowDetailComments = $this->WorkFlowDetailComment->findByDetailIds($workFlowDetailIds);
 		// 合体
 		$result = $this->createViewData($workFlowHead, $workFlowDetails, $workFlowDetailComments);
-		
 		$this->setJsonResponce($result);
 		
 	}
@@ -109,6 +108,7 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
 		$workFlowFiles = $this->WorkFlowHead->find('list');
 		$roleList = $this->Role->find('all', array(
 			'fields' => array('id', 'role_name',),
+			'conditions' => array('id != 1'),
 		));
 		$this->setJsonResponce($roleList, 'roleList');
 
@@ -271,8 +271,16 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
 				}
 			}
 			$viewData["workflowDetails"][] = $detail["WorkFlowDetail"];
+			$viewData["userId"] = $this->Session->read("Auth.User.id");
+			$viewData["roleId"] = $this->Session->read("Auth.User.role_id");
+			$viewData["adminFlag"] = $this->Session->read("Auth.User.admin_flag");
+			$viewData['stateList'] = array(
+				'0' => '未着手',
+				'1' => '作業中',
+				'2' => '作業完了',
+			);
 		}
-
+		
 		return $viewData;
 	}
 
@@ -285,11 +293,11 @@ public $uses = array('WorkFlowHead', 'WorkFlowDetail', 'WorkFlowDetailComment','
 		$finish_color = '#c0ff23';
 		$current_color = '#ffc023';
 		$yet_color = '#cfcfcf';
-		$finish = '完了';
+		$finish = '作業完了';
 		$current = '作業中';
 		$yet = '未着手';
 		if ($detail["WorkFlowDetail"]["task_state"] == self::TASK_STATE_FINISH) {
-			$detail["WorkFlowDetail"]["task_state_cokor"] = $finish_color;
+			$detail["WorkFlowDetail"]["task_state_color"] = $finish_color;
 			$detail["WorkFlowDetail"]["task_state"] = $finish;
 		} elseif ($detail["WorkFlowDetail"]["task_state"] == self::TASK_STATE_CURRENT) {
 			$detail["WorkFlowDetail"]["task_state_color"] = $current_color;

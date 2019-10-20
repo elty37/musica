@@ -103,10 +103,11 @@ class UsersController extends AppController {
 			$this->Flash->error("そのIDは存在しません。");
 			return $this->redirect(array('action' => 'index'));
 		}
-		$password = Hash::get($this->request->query, "password", self::DEFALUT_PAGE);
-		$input_user = $this->request->data;
-		$input_user["User"]["password"] = AuthComponent::password($password);
 		if ($this->request->is(array('post', 'put'))) {
+			$password = Hash::get($this->request->data["User"], "password", self::DEFALUT_PAGE);
+			$input_user = $this->request->data;
+			$blowfishPasswordHasher = new BlowfishPasswordHasher();
+			$input_user["User"]["password"] = $blowfishPasswordHasher->hash($password);	
 			if ($this->User->save($input_user)) {
 				$this->Flash->success(__('The user has been saved.'));
 				return $this->redirect(array('action' => 'index'));

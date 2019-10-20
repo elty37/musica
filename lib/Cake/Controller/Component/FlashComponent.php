@@ -38,7 +38,7 @@ class FlashComponent extends Component {
 		'key' => 'flash',
 		'element' => 'default',
 		'params' => array(),
-		'clear' => false
+		'clear' => true
 	);
 
 /**

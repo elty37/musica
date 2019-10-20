@@ -18,7 +18,7 @@
                 width="1.69in" height="0.713333in"
                 viewBox="0 0 507 214">
                 <path :id="'task-' + workflowDetail.id"
-                        :fill="workflowDetail.task_state_color" :stroke="workflowDetail.task_state_color" stroke-width="0" v-on:mouseover="focus(workflowDetail)" v-on:mouseout="releaseFocus(workflowDetail)" v-on:click="displayWorkflowTaskInfo(workflowDetail)"
+                        :fill="workflowDetail.task_state_color" :stroke="workflowDetail.task_state_color" stroke-width="0" v-on:mouseover="focus(workflowDetail)" v-on:mouseout="releaseFocus(workflowDetail)" v-on:click="displayWorkflowTaskInfo(workflowDetail, roleId)"
                         d="M 296.00,82.00
                         C 296.00,82.00 0.00,82.00 0.00,82.00
                             0.00,82.00 0.00,132.00 0.00,132.00
@@ -80,48 +80,50 @@
                         <div class="col-sm-10 task_value" id="id-comments">
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
         <div class="col-sm-4" id="workflowInfo">
-              <div class="contant-title">
+            <div class="contant-title">
                 <h2>ワークフロー</h2>
-                <div class="container" id="id-workflow_info_table">
-                  <div class="row border-bottom">
-                      <div class="col-sm-3 task_label">
-                          <label>ワークフローID</label>
-                      </div>
-                      <div class="col-sm-9 task_value" id="id-workflowId">
-                          {{id}}
-                      </div>
-                  </div>
-                  <div class="row border-bottom">
-                      <div class="col-sm-3 task_label">
-                          <label>ワークフロー名</label>
-                      </div>
-                      <div class="col-sm-9 task_value" id="id-workflowName">
-                          {{work_flow_name}}
-                      </div>
-                  </div>
-                  <div class="row border-bottom">
-                      <div class="col-sm-3 task_label">
-                          <label>編集ファイル</label>
-                      </div>
-                      <div class="col-sm-9 task_value" id="id-fileName">
-                          {{file_name}}
-                      </div>
-                  </div>
-                  <div class="row border-bottom">
-                      <div class="col-sm-3 task_label">
-                          <label>作成日</label>
-                      </div>
-                      <div class="col-sm-9 task_value" id="id-created">
-                          {{created}}
-                      </div>
-                  </div>
-              </div>
-              </div>
+            </div>
+            <div class="container" id="id-workflow_info_table">
+                <div class="row border-bottom">
+                    <div class="col-sm-3 task_label">
+                        <label>ワークフローID</label>
+                    </div>
+                    <div class="col-sm-9 task_value" id="id-workflowId">
+                        {{id}}
+                    </div>
+                </div>
+                <div class="row border-bottom">
+                    <div class="col-sm-3 task_label">
+                        <label>ワークフロー名</label>
+                    </div>
+                    <div class="col-sm-9 task_value" id="id-workflowName">
+                        {{work_flow_name}}
+                    </div>
+                </div>
+                <div class="row border-bottom">
+                    <div class="col-sm-3 task_label">
+                        <label>編集ファイル</label>
+                    </div>
+                    <div class="col-sm-9 task_value" id="id-fileName">
+                        {{file_name}}
+                    </div>
+                </div>
+                <div class="row border-bottom">
+                    <div class="col-sm-3 task_label">
+                        <label>作成日</label>
+                    </div>
+                    <div class="col-sm-9 task_value" id="id-created">
+                        {{created}}
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
           <script>
               function getNowDate() {
@@ -208,12 +210,49 @@
                 releaseFocus: function(workflowState) {
                     $('#task-' + workflowState.taskId).css({'fill': workflowState.stateColor});
                 },
-                displayWorkflowTaskInfo: function(workflowState) {
+                displayWorkflowTaskInfo: function(workflowState, roleId) {
                     $('#id-task_info_table').css({display: 'inherit'});
                     $('#id-taskId').text(workflowState.id);
                     $('#id-taskName').text(workflowState.role_name);
-                    $('#id-state').text(workflowState.task_state);
+                    if (roleId != workflowState.role_id && this.userId != '1') {
+                        $('#id-state').text(workflowState.task_state);
+                    } else {
+                        $('#id-state').text('');
+                        var container = $('<div class="container"></div>');
+                        var row = $('<div class="row"></div>');
+                        var form = $("<form></form>");
+                        var select = $("<select class='col-sm-3 form-control' name='data[WorkFlowDetail][task_state]'></select>");
+                        var submitDiv = $("<div class='col-sm-3'></div>");
+                        var submitButton = $('<button class="btn btn-info" type="submit">変更する</button>');
+                        submitDiv.append(submitButton);
+                        var options = this.stateList;
+                        var currentState =workflowState.task_state;
+                        var option = $("<option></option>");
+                        for (var i = 0; i<options.length ;i++) {
+                            option = $("<option></option>");
+                            option.val(i);
+                            if (options[i] == currentState) {
+                                option.attr('selected',true);
+                            }
+                            option.text(options[i]);
+                            select.append(option);
+                        }
+                        var taskId = $('<input type="hidden" name="data[WorkFlowDetail][id]"></input>');
+                        taskId.val(workflowState.id);
+                        var headId = $('<input type="hidden" name="headId"></input>');
+                        headId.val(this.id);
+                        row.append(select);
+                        row.append(submitDiv);
+                        row.append(taskId);
+                        row.append(headId);
+                        form.attr("action","/work_flow_details/edit/" + workflowState.id);
+                        form.attr("method","post");
+                        form.append(row);
+                        container.append(form);
+                        $('#id-state').append(container);
+                    }
                     $('#id-modified').text(workflowState.modified);
+                    
                     let commentsDiv = $("<div></div>");
                     let commentDiv = $("<div></div>");
                     let commentInput = $('<input />');
@@ -268,7 +307,7 @@
                     $('#id-comments').append('<div class="commentbtn"><button type="button" class="btn btn-info" onclick="sendComment()" id="id-comment_btn">コメントする</button></div>');
                 }
               },
-              data: <?php echo $result; ?> 
+              data: <?php echo $result; ?>
             });
             let workflowInfo = new Vue({
               el: '#id-workflow_info_table',

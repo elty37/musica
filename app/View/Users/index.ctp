@@ -40,7 +40,7 @@
               操作
             </div>
           </div>
-          <div class="row border-bottom" v-for="(result, index) in results">
+          <div class="row border-bottom" v-for="(result, index) in results" v-if="result.User.id != 1">
             <div class="col-sm-1 d-flex align-items-end">{{result.User.id}}</div>
             <div class="col-sm-3 d-flex align-items-end">
                 <a v-bind:href="userEditUrl + result.User.id" class="btn btn-link p-0">
@@ -59,70 +59,6 @@
                     {{result.User.modified}}
             </div>
             <div class="col-sm-2 d-flex align-items-end">
-
-            <!-- template for the modal component -->
-            <script type="text/x-template" id="modal-template">
-              <transition name="modal">
-                <div class="modal-mask">
-                  <div class="modal-wrapper">
-                    <div class="modal-container">
-
-                      <div class="modal-header">
-                        <slot name="header">
-                        </slot>
-                        <div class="pull-left">
-                            <button type="button" class="modal-default-button btn btn-outline-danger" @click="$emit('close')">×</button>
-                        </div>
-                      </div>
-
-                      <div class="modal-body">
-                        <slot name="body">
-                          default body
-                        </slot>
-                      </div>
-
-                      <div class="modal-footer">
-                      <slot name="submit-button">
-                            　<button type="button" class="modal-default-button btn btn-outline-info" @click="$emit('close')">アップロード</button>
-                      </slot>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </transition>
-            </script>
-
-            <!-- app -->
-            <div id="app">
-              <!-- use the modal component, pass in the prop -->
-              <modal v-if="showModal" @close="showModal = false">
-                <h3 slot="header">Excelファイルのアップロード</h3>
-                <div slot="body">
-                <div class="form-group form-inline">
-                    <label>
-                        <span class="btn btn-primary">
-                            ファイルを選択
-                            <input type="file" name="csvfile" accept=".xlsx" style="display:none" v-on:change="showFileName">
-                        </span>
-                    </label>
-                    <div id="id-filename" style="margin-left:10px;">
-                        {{fileName}}
-                    </div>
-                </div>
-              <div class="form-group form-check">
-                  
-                <input style="display:none" type="checkbox" class="form-check-input" id="workflowCheck" v-model="currentTaskIsFinished">
-                <label class="label_checkbox_not_checked" for="workflowCheck" v-if="currentTaskIsFinished">
-                  ☐
-                </label>
-                <label class="label_checkbox_checked" for="workflowCheck" v-else>
-                  ☑
-                </label>
-                <label class="form-check-label" for="workflowCheck">作業を完了する</label>
-              </div>
-                </div>
-              </modal>
-            </div>
             
             <?php if ($this->Session->read('Auth.User.admin_flag') == '1') : ?>
             <a :href="deleteUrl + result.User.id" class="btn btn-outline-danger btn-sm mr-2" onclick="return confirm('ファイルを削除します。よろしいですか？');">

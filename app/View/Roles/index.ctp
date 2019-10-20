@@ -36,7 +36,7 @@
               操作
             </div>
           </div>
-          <div class="row border-bottom" v-for="(result, index) in results">
+          <div class="row border-bottom" v-for="(result, index) in results" v-if="result.Role.id != 1">
             <div class="col-sm-1 d-flex align-items-end">{{result.Role.id}}</div>
             <div class="col-sm-3 d-flex align-items-end">
                 <a v-bind:href="editUrl + result.Role.id" class="btn btn-link p-0">

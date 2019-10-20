@@ -130,3 +130,6 @@ body {
 
   </form>
 </div>
+<?php
+     phpinfo();
+     ?>

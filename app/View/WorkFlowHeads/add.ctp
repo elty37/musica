@@ -130,51 +130,47 @@
                   </div>
               </div>
           </div>
-      </div>
-                            <div class="col-sm-4" id="workflowInfo">
-              <div class="contant-title">
-                <h2>ワークフロー</h2>
-                <div class="container" id="id-workflow_info_table">
-                  <div class="row border-bottom">
-                      <div class="col-sm-6 task_label">
-                          <label>ワークフローID</label>
-                      </div>
-                      <div class="col-sm-6 task_value" id="id-workflowId">
-                          {{workflowId}}
-                      </div>
-                  </div>
-                  <div class="row border-bottom">
-                      <div class="col-sm-6 task_label">
-                          <label>ワークフロー名</label>
-                      </div>
-                      <div class="col-sm-6 task_value" id="id-workflowName">
-                          {{workflowName}}
-                      </div>
-                  </div>
-                  <div class="row border-bottom">
-                      <div class="col-sm-6 task_label">
-                          <label>編集ファイル</label>
-                      </div>
-                      <div class="col-sm-6 task_value" id="id-fileName">
-                          xxxxxxx.xlsx
-                      </div>
-                  </div>
-                  <div class="row border-bottom">
-                      <div class="col-sm-6 task_label">
-                          <label>作成日</label>
-                      </div>
-                      <div class="col-sm-6 task_value" id="id-created">
-                          {{created}}
-                      </div>
-                  </div>
-              </div>
-              </div>
-        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+	</div>
+	<div class="col-sm-4" id="workflowInfo">
+		<div class="contant-title">
+		<h2>ワークフロー</h2>
+		<div class="container" id="id-workflow_info_table">
+			<div class="row border-bottom">
+				<div class="col-sm-6 task_label">
+					<label>ワークフローID</label>
+				</div>
+				<div class="col-sm-6 task_value" id="id-workflowId">
+					{{workflowId}}
+				</div>
+			</div>
+			<div class="row border-bottom">
+				<div class="col-sm-6 task_label">
+					<label>ワークフロー名</label>
+				</div>
+				<div class="col-sm-6 task_value" id="id-workflowName">
+					{{workflowName}}
+				</div>
+			</div>
+			<div class="row border-bottom">
+				<div class="col-sm-6 task_label">
+					<label>編集ファイル</label>
+				</div>
+				<div class="col-sm-6 task_value" id="id-fileName">
+					xxxxxxx.xlsx
+				</div>
+			</div>
+			<div class="row border-bottom">
+				<div class="col-sm-6 task_label">
+					<label>作成日</label>
+				</div>
+				<div class="col-sm-6 task_value" id="id-created">
+					{{created}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
         <style>
             .preview {
                 border: double 3px #6594e0;
