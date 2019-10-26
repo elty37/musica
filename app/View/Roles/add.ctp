@@ -61,50 +61,149 @@
 						<div class="contant-title">
 							<h2>ユーザ</h2>
 						</div>
-						<div class="container preview">
-							ほげ
+						<div class="container preview" id="id-users">
+                            <div class="row" id="id-search">
+                            検索
+                            </div>
+                            <div class="cp_ipcheck row">
+                                <div id="no-mergin" class="col-sm-2" v-for="(user, index) in userList">
+                                    <input :name="beforeName + user.userId + afterName" class="form-control" type="hidden" value="0">
+                                    <input :id="index" :name="beforeName + user.userId + afterName" class="form-control" type="checkbox" value="1">
+                                    <label :for="index" class="input_label">
+                                        {{user.userName}}
+                                    </label>
+                                </div>
+                            </div>
 						</div>
 					</div>
 				</div>
 				<style>
+                    #no-mergin {
+                        margin: 0px 0px 0px 0px;
+                        padding: 0px 0px 0px 0px;
+                    }
 					.preview {
 						border: double 3px #6594e0;
 						border-radius: 15px;
 					}
+                    input[type=checkbox] {
+                        display: none; /* チェックボックスを非表示にする */
+                    }
+                    #id-users .cp_ipcheck {
+                        width: 90%;
+                        margin: 2em auto;
+                        text-align: left;
+                    }
+                    #id-users .cp_ipcheck input[type='checkbox'] {
+                        position: absolute;
+                        z-index: -1;
+                        opacity: 0;
+                    }
+                    #id-users .cp_ipcheck label {
+                        position: relative;
+                        display: inline-block;
+                        margin-right: 30px;
+                        padding-right: 10px;
+                        padding-left: 35px;
+                        cursor: pointer;
+                    }
+                    #id-users .cp_ipcheck label::before {
+                        position: absolute;
+                        z-index: -1;
+                        top: 0;
+                        left: 0;
+                        display: block;
+                        width: 24px;
+                        height: 24px;
+                        content: ' ';
+                        border: 2px solid #3c71da;
+                    }
+                    #id-users .cp_ipcheck input[type='checkbox'] + label::before {
+                        border-radius: 4px;
+                    }
+                    #id-users .cp_ipcheck input[type='checkbox']:checked + label {
+                        padding-left: 10px;
+                        color: #ffffff;
+                    }
+                    #id-users .cp_ipcheck input[type='checkbox']:checked + label::before {
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: #3c71da;
+                    }
+                    /* Transition */
+                    #id-users .cp_ipcheck label, .cp_ipcheck label::before {
+                        -webkit-transition: 0.25s all ease;
+                                transition: 0.25s all ease;
+                    }
 				</style>
 				<script>
-var list = new Vue({
-              el: '#id-list',
-              data: {
-                workflowName: '',
-                workflowStates: [
-                  {
-                      taskId : "7",
-                      modified: y + '-' + mm + '-' + dd + ' ' + hh + ':' + mmi + ':' + ss,
-                      taskName: '',
-                      state: '未着手',
-                      stateColor: '#cfcfcf',
-                      stateColorMouceOver: '#b0b0b0',
-                      comment: []
-                  }
-                ]
-              },
-               methods:{
-                    changeTaskName : function(event) {
-                    },
-                    changeTaskForm : function(event) {
-                    },
-                    
-                   focus: function(workflowState) {
-                    $('#task-' + workflowState.taskId).css({'fill': workflowState.stateColorMouceOver});
-                    },
-                    releaseFocus: function(workflowState) {
-                        $('#task-' + workflowState.taskId).css({'fill': workflowState.stateColor});
-                    },
-                    displayWorkflowTaskInfo: function(workflowState, index) {
-                    }
+            new Vue({
+               el: '#id-users',
+                data: {
+                    beforeName: "data[User][user_id",
+                    afterName: "]",
+                    userList: [
+                     {
+                         userId: 1,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 2,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 3,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 4,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 5,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 1,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 2,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 3,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 4,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },                     {
+                         userId: 5,
+                         userName: "五十嵐桜",
+                         currentRoleId: "2",
+                         currentRoleName: "シナリオ作成"
+                     },
+                     {
+                         userId: 7,
+                         userName: "夏目怜",
+                         currentRoleId: "3",
+                         currentRoleName: "素材作成"
+                     }
+                    ]
                 }
-            })
+            });        
 				</script>
 			</div>
 		</div>	
