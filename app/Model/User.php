@@ -7,6 +7,11 @@ App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
  * @property User $User
  */
 class User extends AppModel {
+	/**
+	 * 認証タイプ
+	 */
+	const AUTH_TYPE_NORMAL = 0; // 一般
+	const AUTH_TYPE_TWITTER = 1; //twitter
 
 /**
  * Validation rules

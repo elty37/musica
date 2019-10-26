@@ -150,7 +150,7 @@
                 let role_name = '<?php echo $this->Session->read('Auth.User.role_name'); ?>';
                 $.ajax({
                     type: 'POST',
-                    url: ' http://localhost/work_flow_detail_comments/',
+                    url: ' https://localhost.lulu.mikazegaoka.ac.jp/work_flow_detail_comments/',
                     data: {
                         comment:textField.val(),
                         work_flow_detail_id:$('#id-taskId').text(),

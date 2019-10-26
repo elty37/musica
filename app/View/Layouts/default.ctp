@@ -57,7 +57,7 @@
                 <div class="col-sm-9">
                 </div>
                 <div class="col-sm-1">
-                  <a href="http://localhost/users/logout" class="btn btn-info float-right">
+                  <a href="https://localhost.lulu.mikazegaoka.ac.jp/users/logout" class="btn btn-info float-right">
                     <i class="fas fa-sign-out-alt"></i>
                   </a>
                 </div>

@@ -1,20 +1,24 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
 /**
  * Users Controller
  *
  * @property User $User
+ * @property Role $Role
+ * @property OauthSignup $OauthSignup
  * @property PaginatorComponent $Paginator
  */
 class UsersController extends AppController {
 
 	const ADMIN_ID = 1;
+
 /**
  * Components
  *
  * @var array
  */
-	public $uses = array('User', 'Role');
+	public $uses = array('User', 'Role', 'OauthSignup');
 	public $paginate = array(
 		'User',
 		array(
@@ -29,7 +33,7 @@ class UsersController extends AppController {
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
-		$this->Auth->allow('login');
+		$this->Auth->allow('login', 'twitterAuth');
 	}
 
 /**
@@ -224,5 +228,78 @@ class UsersController extends AppController {
 	 */
 	public function logout() {
 		$this->redirect($this->Auth->logout());
+	}
+
+	/**
+	 * Twitter認証
+	 * @param int $id ツイッターのuser_id
+	 */
+	public function twitterAuth($id) {
+		$login_user = $this->User->find('first', array(
+			'conditions' => array(
+					'auth_user_id' => $id,
+					'auth_type' => $this->User::AUTH_TYPE_TWITTER,
+				),
+			)
+		);
+		if(is_null($login_user) || count($login_user) == 0) {
+			$this->Flash->error(__('your twitter account is not authorized.'));
+			$this->redirect($this->Auth->logout());
+		}
+
+		if ($this->Auth->login($login_user["User"])) {
+			$this->Auth->setToken();
+			$login_users_role = $this->Role->find('first', array(
+				'conditions' => array(
+						'id' => $login_user["User"]["role_id"],
+					),
+				)
+			);
+			$this->Session->write('Auth.User.role_name', $login_users_role["Role"]["role_name"]);
+			$this->Session->write('Auth.User.admin_flag', $login_users_role["Role"]["admin_flag"]);
+			$this->redirect($this->Auth->redirect());
+		} else {
+			$this->Flash->error(__('Invalid username or password, try again'));
+		}
+	}
+
+	/**
+	 * ツイッターログインユーザ作成エンドポイント生成
+	 * 管理者権限のあるユーザのみ使用可能
+	 * エンドポイントの有効期間は10分
+	 */
+	public function createUserEntryForTwitter() {
+		if ($this->request->is('post')) {
+			$userName = Hash::get($this->request->data["UserEntryForTwitter"], "user_name", null);
+			$mailAddress = Hash::get($this->request->data["UserEntryForTwitter"], "mail_address", null);
+
+			if (is_null($userName)) {
+				$this->Flash->error(__('ユーザ名は必須です.'));
+				$this->redirect(array('action' => 'userEntryForTwitter'));
+			}
+			if (is_null($mailAddress)) {
+				$this->Flash->error(__('メールアドレスは必須です.'));
+				$this->redirect(array('action' => 'userEntryForTwitter'));
+			}
+			$oneTimePassword = substr(str_shuffle('1234567890abcdefghijklmnopqrstuvwxyz'), 0, 36);
+			$this->OauthSignup->create();
+			$oauthSignup = array(
+				"OauthSignup" => array(
+					"user_name" => $userName,
+					"one_time_password" => $oneTimePassword,
+				),
+			);
+			$this->OauthSignup->save($oauthSignup);
+			$Email = new CakeEmail();
+			$Email->from(array('lulu@mikazegaoka.com' => '美風ヶ丘高校ワークフロー'));
+			$Email->to($mailAddress);
+			$Email->subject('ユーザ登録');
+			$Email->send('http://localhost/users/userEntryForTwitter/' . $oneTimePassword);
+			$this->redirect(array('action' => 'createUserEntryForTwitter'));
+		}
+	}
+
+	public function userEntryForTwitter() {
+
 	}
 }

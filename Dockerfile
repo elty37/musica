@@ -13,4 +13,8 @@ RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 RUN mkdir -p /var/log/logdir
 RUN chmod 777 /var/log/logdir
-EXPOSE 80
+RUN curl -sSLO https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 \
+    && chmod +x mhsendmail_linux_amd64 \
+    && mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail \
+    && echo 'sendmail_path = "/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025"' > /usr/local/etc/php/conf.d/sendmail.ini
+EXPOSE 8000
