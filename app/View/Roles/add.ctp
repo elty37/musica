@@ -62,11 +62,26 @@
 							<h2>ユーザ</h2>
 						</div>
 						<div class="container preview" id="id-users">
-                            <div class="row" id="id-search">
-                            検索
+                            <div class="search-area">
+                                <h4>検索条件</h4>
+                                <div id="id-search">
+                                    <div class="row">
+                                        <div class="form-inline">
+                                            <label class="col-sm-2">
+                                                名前：
+                                            </label>
+                                            <input type="text" class="form-control col-sm-4" v-model="searchName" />
+                                            <label class="col-sm-2">
+                                                ロール：
+                                            </label>
+                                            <input type="text" class="form-control col-sm-4" v-model="searchRole" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="cp_ipcheck row">
-                                <div id="no-mergin" class="col-sm-2" v-for="(user, index) in userList">
+                                <div id="no-mergin" class="col-sm-2" v-for="(user, index) in userList" v-if="hideName(user.userName, user.currentRoleName, searchName, searchRole)">
                                     <input :name="beforeName + user.userId + afterName" class="form-control" type="hidden" value="0">
                                     <input :id="index" :name="beforeName + user.userId + afterName" class="form-control" type="checkbox" value="1">
                                     <label :for="index" class="input_label">
@@ -140,7 +155,32 @@
 				<script>
             new Vue({
                el: '#id-users',
+                methods:{
+                    hideName : function(userName, roleName, searchName, searchRole) {
+                        var nameSearchResult = false;
+                        var roleSearchResult = false;
+                        if (searchName.length == 0) {
+                            nameSearchResult = true;
+                        } else if (userName.indexOf(searchName) > -1) {
+                            nameSearchResult = true;
+                        } else {
+                            nameSearchResult = false;
+                        }
+
+                        if (searchRole.length == 0) {
+                            roleSearchResult = true;
+                        } else if (roleName.indexOf(searchRole) > -1) {
+                            roleSearchResult = true;
+                        } else {
+                            roleSearchResult = false;
+                        }
+
+                        return nameSearchResult && roleSearchResult;
+                    }
+                },
                 data: {
+                    searchName: "",
+                    searchRole: "",
                     beforeName: "data[User][user_id",
                     afterName: "]",
                     userList: [
@@ -151,50 +191,30 @@
                          currentRoleName: "シナリオ作成"
                      },                     {
                          userId: 2,
-                         userName: "五十嵐桜",
+                         userName: "園川風奈",
                          currentRoleId: "2",
-                         currentRoleName: "シナリオ作成"
+                         currentRoleName: "管理者"
                      },                     {
                          userId: 3,
-                         userName: "五十嵐桜",
+                         userName: "アディール＝ジスカール",
                          currentRoleId: "2",
-                         currentRoleName: "シナリオ作成"
+                         currentRoleName: "素材担当"
                      },                     {
                          userId: 4,
-                         userName: "五十嵐桜",
+                         userName: "音無伊緒",
                          currentRoleId: "2",
-                         currentRoleName: "シナリオ作成"
+                         currentRoleName: "素材担当"
                      },                     {
                          userId: 5,
-                         userName: "五十嵐桜",
+                         userName: "御庭つみき",
                          currentRoleId: "2",
                          currentRoleName: "シナリオ作成"
                      },                     {
                          userId: 1,
                          userName: "五十嵐桜",
                          currentRoleId: "2",
-                         currentRoleName: "シナリオ作成"
-                     },                     {
-                         userId: 2,
-                         userName: "五十嵐桜",
-                         currentRoleId: "2",
-                         currentRoleName: "シナリオ作成"
-                     },                     {
-                         userId: 3,
-                         userName: "五十嵐桜",
-                         currentRoleId: "2",
-                         currentRoleName: "シナリオ作成"
-                     },                     {
-                         userId: 4,
-                         userName: "五十嵐桜",
-                         currentRoleId: "2",
-                         currentRoleName: "シナリオ作成"
-                     },                     {
-                         userId: 5,
-                         userName: "五十嵐桜",
-                         currentRoleId: "2",
-                         currentRoleName: "シナリオ作成"
-                     },
+                         currentRoleName: "動画編集"
+                     },                     
                      {
                          userId: 7,
                          userName: "夏目怜",

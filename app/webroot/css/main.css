@@ -12,9 +12,16 @@ body {
 .navbar-nav a{
     text-align:center
 }
-#id-title h1, .contant-title h2, .contant-title h1 {
+#id-title h1, .contant-title h4, .contant-title h2, .contant-title h1 {
     color: #6594e0;
     border-bottom: dashed 2px #6594e0;
+}
+.search-area{
+    padding-bottom: 10px;
+    border-bottom: dashed 2px #6594e0;
+}
+.search-area h4{
+    color: #6594e0;
 }
 #id-title h1, .contant-title h1 {
     margin-bottom: 20px;
